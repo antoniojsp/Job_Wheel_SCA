@@ -29,6 +29,7 @@ class Jobs:
         df = pd.read_csv(url)
 
         for i in range(len(df)):
+            print(df)
             job = df.values[i][0]
             day = df.values[i][1]
             name = df.values[i][5]
@@ -46,6 +47,9 @@ class Jobs:
 
     def dict(self):
         return self.members
+
+
+
 
 
 SHEET_ID = '11trob6GMCskw1qbvILMPKBeJlKxTh_b_PfG9Iy80uVo'
