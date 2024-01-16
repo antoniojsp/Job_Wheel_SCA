@@ -1,3 +1,4 @@
+import gspread
 import pandas as pd
 from pprint import pprint
 from math import isnan
@@ -5,7 +6,7 @@ from math import isnan
 
 class Jobs:
     def __init__(self, sheet_id: str, sheet_name: str):
-        self.members = {"No assigned jobs":[]}
+        self.members = {"No assigned jobs": []}
         self.sheet_id = sheet_id
         self.sheet_name = sheet_name
         self.pull_info_from_sheet()
@@ -20,7 +21,7 @@ class Jobs:
         self.members[name][day].append((job, points))
         self.members[name]["points"] += points
 
-    def no_assigned_jobs(self, job:str) -> None:
+    def no_assigned_jobs(self, job: str) -> None:
         self.members["No assigned jobs"].append(job)
 
     def pull_info_from_sheet(self) -> None:
@@ -42,7 +43,6 @@ class Jobs:
                 self.add_job(name.capitalize(), job.capitalize(), day.capitalize(), points)
             else:
                 self.no_assigned_jobs((day, job, points))
-
 
     def dict(self):
         return self.members
