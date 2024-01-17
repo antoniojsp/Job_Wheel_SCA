@@ -1,12 +1,63 @@
 import gspread
+from pprint import pprint
 
-gc = gspread.service_account(filename='C:/Users/Antonio/PycharmProjects/Job_Wheel/credentials.json')
 
-sh = gc.open("Copy of JS Job Wheel")
+class Jobs:
+    def __init__(self, credentials):
+        self.credentials = credentials
+        self.members = {"No assigned jobs": {"points": 0}}
+        self.pull_info_from_sheet(credentials)
 
-print(sh.sheet1.get('A1'))
+    def add_job(self, name: str, day: str, jobs_points: tuple[str, str]) -> None:
+        if name not in self.members:
+            self.members[name] = {"points": 0}
 
-url = "https://docs.google.com/spreadsheets/d/1XTb5lM1OOd4PNZ0O4FawsYIH1We6f-WH9lEkUV6yp0w/edit#gid=1847066599"
-spreadsheet = gc.open_by_url(url)
-sheet_names = [s.title for s in spreadsheet.worksheets()]
-print(sheet_names)
+        if day not in self.members[name]:
+            self.members[name][day] = []
+
+        self.members[name][day].append(jobs_points)
+        self.members[name]["points"] += jobs_points[1]
+
+    def pull_info_from_sheet(self, credentials: str) -> None:
+        gc = gspread.service_account(filename=credentials)
+
+        sh = gc.open("Copy of JS Job Wheel")
+        sheet_names = [s.title for s in sh.worksheets()]
+        a = sh.worksheet(sheet_names[0])
+
+        for row in a.get()[1:]:
+            length = len(row)
+            if length < 6:
+                row.append("")
+
+            job = row[0] if row[0] else ""
+            day = row[1] if row[1] else ""
+            name = row[5] if row[5] else ""
+            points = row[4]
+            try:
+                points = float(points)
+            except ValueError:
+                points = 0
+
+            if len(name) > 0:  # if there is no name, then do not add (for now)
+                name = name.capitalize()
+            else:
+                name = "No assigned jobs"
+            if day:
+                day = day.capitalize()
+            else:
+                day = "Coord"  # if it's not a day of the week or weekly/bi-weekly job, then is a coord job.
+            job_points = (job, points)
+            self.add_job(name.capitalize(), day.capitalize(), job_points)
+
+    def dict(self):
+        return self.members
+
+
+a = Jobs("./credentials.json")
+pprint(a.dict())
+num = 0
+for i in a.dict():
+    num += a.dict()[i]["points"]
+
+print(num)
