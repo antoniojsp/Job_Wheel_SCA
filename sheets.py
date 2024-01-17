@@ -5,10 +5,18 @@ from pprint import pprint
 class Jobs:
     def __init__(self, credentials):
         self.credentials = credentials
-        self.members = {"No assigned jobs": {"points": 0}}
+        self.members = {"No assigned jobs": {"points": 0}} # starts by adding jobs that are not covered
         self.pull_info_from_sheet(credentials)
 
     def add_job(self, name: str, day: str, jobs_points: tuple[str, str]) -> None:
+        """
+        add a job, indicating the member assigned, the day, the name of the job and how
+        mamy points the member gets
+        :param name: name of member
+        :param day: day of the week, or if it's weekly, biweekly or coord
+        :param jobs_points:
+        :return:
+        """
         if name not in self.members:
             self.members[name] = {"points": 0}
 
