@@ -3,24 +3,23 @@ from pprint import pprint
 
 
 class Jobs:
-    def __init__(self, title:str,  credentials_location:str):
+    def __init__(self, title: str, credentials_location: str):
         #  initialize storage
         self.members = {"No assigned jobs": {"points": 0}}  # hold the info from each member and their jobs
-        #  connect to spreadsheet
+        #  connect to google spreadsheet
         self.gc = gspread.service_account(filename=credentials_location)
-        self.sheet = self.gc.open(title)
+        self.sheet = self.gc.open(title)  # title: title of the spreadsheet to use
         #  latest sheet in spreadsheet
         self.latest_sheet = self.get_sheet_names()[0]
         #  keep track of points
         self.points = 0
         #  pull information from Google Sheets
-        self.pull_info_from_sheet()
+        self.fill_up_from_sheet()
 
-
-    def  get_points(self):
+    def get_points(self):
         return self.points
 
-    def add_job_info(self, name: str, day: str, job:str, points:float) -> None:
+    def add_job_info(self, name: str, day: str, job: str, points: float) -> None:
         """
         add a job, indicating the member assigned, the day, the name of the job and how
         mamy points the member gets
@@ -37,27 +36,31 @@ class Jobs:
 
         self.members[name][day].append((job, points))
         self.members[name]["points"] += points
+        self.points += points
 
     def get_sheet_names(self) -> list:
         return [s.title for s in self.sheet.worksheets()]  # sheet names (to select the current or past sheet)
 
-    def pull_info_from_sheet(self) -> None:
-        entire_sheet = self.sheet.worksheet(self.get_sheet_names()[0])  # currently, only selects the most recent job wheel schedule
+    def fill_up_from_sheet(self) -> None:
+        entire_sheet = self.sheet.worksheet(self.get_sheet_names()[0])  # currently, only selects the most recent job
+        # wheel schedule
 
         for row in entire_sheet.get()[1:]:
             '''
             Currently, there is no established format to fill up the google doc file
             for the job wheel. These inconsistencies need to be fixed by selecting
-            an appropriate format. Some tricks have been used to avoid problems due
-            the inconsistent former used by the members.
+            an appropriate format and be consistent with it. I added some value checkers to make sure the data
+            is mostly correct
             '''
             length = len(row)
-            if length < 6:
+            if length < 6:  # every row is sent as a list. If one list has less than 6 items, then one
+                # extra is added so it can be processed. This is due to the lack of consitency from the
+                # spreadsheet side.
                 row.append("")
 
-            job = row[0] if row[0] else ""
-            day = row[1] if row[1] else ""
-            name = row[5] if row[5] else ""
+            job = row[0]
+            day = row[1]
+            name = row[5]
             points = row[4]
 
             '''
@@ -73,16 +76,24 @@ class Jobs:
             else:
                 name = "No assigned jobs"
 
-            if day:
+            if day and day.capitalize() in ["Monday",
+                                            "Tuesday",
+                                            "Wednesday",
+                                            "Thursday",
+                                            "Friday",
+                                            "Saturday",
+                                            "Sunday",
+                                            "Biweekly",
+                                            "Weekly"]:
                 day = day.capitalize()
             else:
                 day = "Coord"  # if it's not a day of the week or weekly/bi-weekly job, then is a coord job.
             self.add_job_info(name.capitalize(), day.capitalize(), job.capitalize(), points)
 
-    def dict(self):
+    def get_dictionary(self) -> dict:
         return self.members
 
 
-a = Jobs("Copy of JS Job Wheel", "./credentials.json")
-pprint(a.dict())
-print(a.get_points())
+# a = Jobs("Copy of JS Job Wheel", "./credentials.json")
+# pprint(a.get_dictionary())
+# print(a.get_points())
