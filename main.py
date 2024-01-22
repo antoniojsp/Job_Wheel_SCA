@@ -9,6 +9,7 @@ data = Jobs("Copy of JS Job Wheel", "./credentials.json")
 def index():
     titles = data.get_sheet_names()
     names = data.get_members_names()
+    print(data.get_dictionary())
     return render_template('index.html', title=titles[0], titles=titles, names=names)
 
 

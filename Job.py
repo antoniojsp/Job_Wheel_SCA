@@ -1,4 +1,5 @@
 import gspread
+from pprint import pprint
 '''
 Eventually, I will need to make a proper database (mongodb or sql) to storage
 all this information. Pulling up the data from Google sheet is not ideal since it's a slow
@@ -14,7 +15,7 @@ class Jobs:
         #  initialize storage
         self.members_dict = {}  # hold the info from each member and their jobs
         #  different storage for no assigned jobs
-        self.no_assigned_jobs = {"No assigned jobs": {"points": 0}}
+        self.no_assigned_jobs = {"No assigned jobs": {"points": 0, "jobs":[]}}
         #  connect to google spreadsheet
         self.gc = gspread.service_account(filename=credentials_location)
         self.sheet = self.gc.open(title)  # title: title of the spreadsheet to use
@@ -39,17 +40,23 @@ class Jobs:
         :param job: string with name of the job
         :param points: float with value of points per job
         """
-        if name not in self.members_dict:
-            self.members_dict[name] = {"points": 0}
+        if name == "No assigned jobs":
+            self.no_assigned_jobs["No assigned jobs"]["jobs"].append((job, points))
+            self.no_assigned_jobs["No assigned jobs"]["points"] += points
+        else:
+            if name not in self.members_dict:
+                self.members_dict[name] = {"points": 0}
 
-        if day not in self.members_dict[name]:
-            self.members_dict[name][day] = []
+            if day not in self.members_dict[name]:
+                self.members_dict[name][day] = []
 
-        self.members_dict[name][day].append((job, points))
-        self.members_dict[name]["points"] += points
-        self.points += points
-        self.names.add(name)
+            self.members_dict[name][day].append((job, points))
+            self.members_dict[name]["points"] += points
+            self.points += points
+            self.names.add(name)
 
+    def get_no_assigned_jobs(self):
+        return dict(self.no_assigned_jobs)
     def get_members_names(self):
         return sorted(list(self.names))
 
@@ -109,6 +116,7 @@ class Jobs:
     def get_dictionary(self) -> dict:
         return self.members_dict
 
-# a = Jobs("Copy of JS Job Wheel", "./credentials.json")
-# pprint(a.get_dictionary())
-# print(a.get_points())
+a = Jobs("Copy of JS Job Wheel", "./credentials.json")
+pprint(a.get_dictionary())
+print(a.get_points())
+pprint(a.get_no_assigned_jobs())
