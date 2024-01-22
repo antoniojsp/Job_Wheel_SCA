@@ -7,7 +7,9 @@ data = Jobs("Copy of JS Job Wheel", "./credentials.json")
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    titles = data.get_sheet_names()
+    names = data.get_members_names()
+    return render_template('index.html', title=titles[0], titles=titles, names=names)
 
 
 if __name__ == "__main__":

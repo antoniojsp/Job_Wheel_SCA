@@ -2,9 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>"jose"</title>
+    <title>SCA Job Wheel {{ title }}</title>
 </head>
 <body>
 
+    <label for="term">Term:</label>
+    <select name="term" id="term">
+        {% for item in titles %}
+        <option value="{{ item }}">{{ item }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label for="names">Name: </label>
+    <select name="names" id="names">
+        {% for name in names %}
+        <option value="{{ name }}">{{ name }}</option>
+        {% endfor %}
+    </select>
 </body>
 </html>

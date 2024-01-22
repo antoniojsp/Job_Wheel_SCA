@@ -1,11 +1,20 @@
 import gspread
-from pprint import pprint
+'''
+Eventually, I will need to make a proper database (mongodb or sql) to storage
+all this information. Pulling up the data from Google sheet is not ideal since it's a slow
+process.
 
+Revisit the idea of have an option to manually update the database (sql or mongo) or automatically
+check the google document every 30 seconds or so to find updates in the Google sheet (hash info
+to see changes?), transfer any changes to the database and use that database.
+'''
 
 class Jobs:
     def __init__(self, title: str, credentials_location: str):
         #  initialize storage
-        self.members = {"No assigned jobs": {"points": 0}}  # hold the info from each member and their jobs
+        self.members_dict = {}  # hold the info from each member and their jobs
+        #  different storage for no assigned jobs
+        self.no_assigned_jobs = {"No assigned jobs": {"points": 0}}
         #  connect to google spreadsheet
         self.gc = gspread.service_account(filename=credentials_location)
         self.sheet = self.gc.open(title)  # title: title of the spreadsheet to use
@@ -13,6 +22,8 @@ class Jobs:
         self.latest_sheet = self.get_sheet_names()[0]
         #  keep track of points
         self.points = 0
+        #  list of members (names need to be unique)
+        self.names = set()
         #  pull information from Google Sheets
         self.fill_up_from_sheet()
 
@@ -28,15 +39,19 @@ class Jobs:
         :param job: string with name of the job
         :param points: float with value of points per job
         """
-        if name not in self.members:
-            self.members[name] = {"points": 0}
+        if name not in self.members_dict:
+            self.members_dict[name] = {"points": 0}
 
-        if day not in self.members[name]:
-            self.members[name][day] = []
+        if day not in self.members_dict[name]:
+            self.members_dict[name][day] = []
 
-        self.members[name][day].append((job, points))
-        self.members[name]["points"] += points
+        self.members_dict[name][day].append((job, points))
+        self.members_dict[name]["points"] += points
         self.points += points
+        self.names.add(name)
+
+    def get_members_names(self):
+        return sorted(list(self.names))
 
     def get_sheet_names(self) -> list:
         return [s.title for s in self.sheet.worksheets()]  # sheet names (to select the current or past sheet)
@@ -88,11 +103,11 @@ class Jobs:
                 day = day.capitalize()
             else:
                 day = "Coord"  # if it's not a day of the week or weekly/bi-weekly job, then is a coord job.
+
             self.add_job_info(name.capitalize(), day.capitalize(), job.capitalize(), points)
 
     def get_dictionary(self) -> dict:
-        return self.members
-
+        return self.members_dict
 
 # a = Jobs("Copy of JS Job Wheel", "./credentials.json")
 # pprint(a.get_dictionary())
