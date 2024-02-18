@@ -34,9 +34,9 @@ class Jobs:
         return self.points
 
     def fill_up_from_sheet(self) -> None:
-        entire_sheet = self.sheet.worksheet(self.sheet_names[0])  # currently, only selects the most recent job
+        entire_sheet = self.sheet.worksheet(self.sheet_names[1])  # currently, only selects the most recent job
+        print(self.sheet_names[1])
         # wheel schedule
-
         for row in entire_sheet.get()[1:]:
             '''
             Currently, there is no established format to fill up the google doc file
@@ -54,6 +54,7 @@ class Jobs:
             day = row[1]
             name = row[5]
             points = row[4]
+            print(job, day, name, points)
 
             '''
             If points are not added in the google sheet or if no numbers are added, they are set to zero.
@@ -93,7 +94,7 @@ class Jobs:
         :param points: float with value of points per job
         """
         if name == "No assigned jobs":
-            self.no_assigned_jobs["No assigned jobs"]["jobs"].append((job, points))
+            self.no_assigned_jobs["No assigned jobs"]["jobs"].append((day, job, points))
             self.no_assigned_jobs["No assigned jobs"]["points"] += points
         else:
             if name not in self.assigned_jobs:
@@ -122,7 +123,7 @@ class Jobs:
 
 
 
-# a = Jobs("Copy of JS Job Wheel", "./credentials.json")
-# pprint(a.get_assigned_jobs())
-# print(a.get_points())
-# pprint(a.get_no_assigned_jobs())
+a = Jobs("JS Job Wheel", "./credentials.json")
+pprint(a.get_assigned_jobs())
+print(a.get_points())
+pprint(a.get_no_assigned_jobs())
