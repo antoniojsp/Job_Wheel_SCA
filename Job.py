@@ -34,8 +34,7 @@ class Jobs:
         return self.points
 
     def fill_up_from_sheet(self) -> None:
-        entire_sheet = self.sheet.worksheet(self.sheet_names[1])  # currently, only selects the most recent job
-        print(self.sheet_names[1])
+        entire_sheet = self.sheet.worksheet(self.sheet_names[0])  # currently, only selects the most recent job
         # wheel schedule
         for row in entire_sheet.get()[1:]:
             '''
@@ -54,7 +53,6 @@ class Jobs:
             day = row[1]
             name = row[5]
             points = row[4]
-            print(job, day, name, points)
 
             '''
             If points are not added in the google sheet or if no numbers are added, they are set to zero.
@@ -64,7 +62,7 @@ class Jobs:
             except ValueError:
                 points = 0
 
-            if len(name) > 0:  # if there is no name, then do not add (for now)
+            if name != "NA":  # if there is no name, then do not add (for now)
                 name = name.capitalize()
             else:
                 name = "No assigned jobs"
@@ -120,10 +118,14 @@ class Jobs:
     def get_sheet_names(self) -> list:
         return [s.title for s in self.sheet.worksheets()]  # sheet names (to select the current or past sheet)
 
+    def get_full_dict(self):
+        temp = self.assigned_jobs
+        temp["No assigned Jobs"] = self.get_no_assigned_jobs()
+        return temp
 
 
-
-a = Jobs("JS Job Wheel", "./credentials.json")
-pprint(a.get_assigned_jobs())
-print(a.get_points())
-pprint(a.get_no_assigned_jobs())
+# a = Jobs("JS Job Wheel", "./credentials.json")
+# pprint(a.get_assigned_jobs())
+# print(a.get_points())
+# pprint(a.get_no_assigned_jobs())
+# pprint(a.get_full_dict())
