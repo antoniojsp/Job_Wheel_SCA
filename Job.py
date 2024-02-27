@@ -15,14 +15,15 @@ to see changes?), transfer any changes to the database and use that database.
 class Jobs:
     def __init__(self, title: str, credentials_location: str):
         #  initialize storage
-        self.assigned_jobs = {}  # hold the info from each member and their jobs
+        self.assigned_jobs = {"Total points": 0}  # hold the info from each member and their jobs
         #  different storage for no assigned jobs
-        self.no_assigned_jobs = {"No assigned jobs": {"points": 0, "jobs": []}}
+        self.no_assigned_jobs = {"Jobs": [], "Total points": 0}
+
         #  connect to google spreadsheet
         self.gc = gspread.service_account(filename=credentials_location)
         self.sheet = self.gc.open(title)  # title: title of the spreadsheet to use
         #  get all the sheet names but we use the first one that it's the current term.
-        self.sheet_names = self.get_sheet_names()
+        self.sheet_names_current = self.get_sheet_names()[0]
         #  keep track of points
         self.points = 0
         #  list of members (names need to be unique)
@@ -34,7 +35,7 @@ class Jobs:
         return self.points
 
     def fill_up_from_sheet(self) -> None:
-        entire_sheet = self.sheet.worksheet(self.sheet_names[0])  # currently, only selects the most recent job
+        entire_sheet = self.sheet.worksheet(self.sheet_names_current)  # currently, only selects the most recent job
         # wheel schedule
         for row in entire_sheet.get()[1:]:
             '''
@@ -92,19 +93,20 @@ class Jobs:
         :param points: float with value of points per job
         """
         if name == "No assigned jobs":
-            self.no_assigned_jobs["No assigned jobs"]["jobs"].append((day, job, points))
-            self.no_assigned_jobs["No assigned jobs"]["points"] += points
+            self.no_assigned_jobs["Jobs"].append((day, job, points))
+            self.no_assigned_jobs["Total points"] += points
         else:
             if name not in self.assigned_jobs:
-                self.assigned_jobs[name] = {"points": 0}
+                self.assigned_jobs[name] = {"Total points": 0}
 
             if day not in self.assigned_jobs[name]:
                 self.assigned_jobs[name][day] = []
 
             self.assigned_jobs[name][day].append((job, points))
-            self.assigned_jobs[name]["points"] += points
-            self.points += points
+            self.assigned_jobs[name]["Total points"] += points
             self.names.add(name)
+            self.assigned_jobs["Total points"] += points
+        self.points += points
 
     def get_no_assigned_jobs(self):
         return dict(self.no_assigned_jobs)
@@ -119,13 +121,13 @@ class Jobs:
         return [s.title for s in self.sheet.worksheets()]  # sheet names (to select the current or past sheet)
 
     def get_full_dict(self):
-        temp = self.assigned_jobs
-        temp["No assigned Jobs"] = self.get_no_assigned_jobs()
-        return temp
+        data_term = {"Current term name": self.sheet_names_current,
+                     "No assigned jobs": self.no_assigned_jobs,
+                     "Assigned jobs": self.assigned_jobs,
+                     "General points": self.points,
+                     "Members names":list(self.names)}
+        return data_term
 
 
-# a = Jobs("JS Job Wheel", "./credentials.json")
-# pprint(a.get_assigned_jobs())
-# print(a.get_points())
-# pprint(a.get_no_assigned_jobs())
-# pprint(a.get_full_dict())
+a = Jobs("JS Job Wheel", "./credentials.json")
+pprint(a.get_full_dict())

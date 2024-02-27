@@ -16,7 +16,6 @@ class JobWheelUpdate:
     def retrieve(self):
         return self.collection.find_one()
 
-# a = Jobs("JS Job Wheel", "./credentials.json")
-# b = JobWheelUpdate()
-# # b.insert(a.get_full_dict())
-# pprint(b.retrieve()["Antonio"])
+a = Jobs("JS Job Wheel", "./credentials.json")
+b = JobWheelUpdate()
+b.insert(a.get_full_dict())
