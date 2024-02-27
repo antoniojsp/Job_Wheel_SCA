@@ -9,6 +9,17 @@ process.
 Revisit the idea of have an option to manually update the database (sql or mongo) or automatically
 check the google document every 30 seconds or so to find updates in the Google sheet (hash info
 to see changes?), transfer any changes to the database and use that database.
+
+UPDATE:
+The Jobs class pull the information from the google sheet, format it as a dict and
+get it ready to be stored in MongoDB atlas, for faster access by the flask server
+
+Example:
+data_term = {"Current term name": "name of the current term,
+             "No assigned jobs": "Dict with the jobs that haven't been assigned and the total points",
+             "Assigned jobs": "Dict with all the jobs assigned, with the name of the member, the jobs and points",
+             "General points": "total of points of no assigned and assigned jobs",
+             "Members names": "list of names of all the members for the dropdown list in flask"}
 '''
 
 
@@ -23,26 +34,30 @@ class Jobs:
         self.gc = gspread.service_account(filename=credentials_location)
         self.sheet = self.gc.open(title)  # title: title of the spreadsheet to use
         #  get all the sheet names but we use the first one that it's the current term.
-        self.sheet_names_current = self.get_sheet_names()[0]
-        #  keep track of points
+        self.current_sheet_name = self.get_sheet_names()[0]
+        #  keep track of the total points of all the jobs (assigned and no assigned)
         self.points = 0
         #  list of members (names need to be unique)
         self.names = set()
-        #  pull information from Google Sheets
+        #  pull information from Google Sheets and creates the dict to be used by mongodb
         self.fill_up_from_sheet()
 
-    def get_points(self):
+    def get_points(self)->int:
+        '''
+        gets the sum of all the points of ALL the jobs (assigned and unassigned)
+        :return: INT
+        '''
         return self.points
 
     def fill_up_from_sheet(self) -> None:
-        entire_sheet = self.sheet.worksheet(self.sheet_names_current)  # currently, only selects the most recent job
+        entire_sheet = self.sheet.worksheet(self.current_sheet_name)  # currently, only selects the most recent job
         # wheel schedule
         for row in entire_sheet.get()[1:]:
             '''
             Currently, there is no established format to fill up the google doc file
             for the job wheel. These inconsistencies need to be fixed by selecting
             an appropriate format and be consistent with it. I added some value checkers to make sure the data
-            is mostly correct
+            is stored correctly
             '''
             length = len(row)
             if length < 6:  # every row is sent as a list. If one list has less than 6 items, then one
@@ -108,8 +123,12 @@ class Jobs:
             self.assigned_jobs["Total points"] += points
         self.points += points
 
-    def get_no_assigned_jobs(self):
-        return dict(self.no_assigned_jobs)
+    def get_no_assigned_jobs(self)-> dict:
+        '''
+        Gets all the unassigned jobs (day, job, points)
+        :return:
+        '''
+        return self.no_assigned_jobs
 
     def get_assigned_jobs(self) -> dict:
         return self.assigned_jobs
@@ -121,7 +140,7 @@ class Jobs:
         return [s.title for s in self.sheet.worksheets()]  # sheet names (to select the current or past sheet)
 
     def get_full_dict(self):
-        data_term = {"Current term name": self.sheet_names_current,
+        data_term = {"Current term name": self.current_sheet_name,
                      "No assigned jobs": self.no_assigned_jobs,
                      "Assigned jobs": self.assigned_jobs,
                      "General points": self.points,
