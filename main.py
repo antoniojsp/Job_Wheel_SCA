@@ -13,7 +13,7 @@ def index():
     titles = data["Current term name"]
     names = sorted(names)
     return render_template('index.html',
-                           title=titles[0],
+                           title=titles,
                            names=names)
 
 
