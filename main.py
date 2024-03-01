@@ -3,12 +3,12 @@ from Job import Jobs
 from Update_mongo import JobWheelUpdate
 
 app = Flask(__name__)
-data = Jobs("JS Job Wheel", "./credentials.json")
+# data = Jobs("JS Job Wheel", "./credentials.json")
+data = JobWheelUpdate().retrieve()
 
 
 @app.route("/")
 def index():
-    data = JobWheelUpdate().retrieve()
     names = data["Members names"]
     titles = data["Current term name"]
     names = sorted(names)
