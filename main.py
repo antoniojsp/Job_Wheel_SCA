@@ -3,7 +3,6 @@ from Job import Jobs
 from Update_mongo import JobWheelUpdate
 
 app = Flask(__name__)
-# data = Jobs("JS Job Wheel", "./credentials.json")
 data = JobWheelUpdate().retrieve()
 
 
@@ -19,16 +18,16 @@ def index():
 
 @app.route("/update")
 def update_job_wheel():
-    google_doc = Jobs("JS Job Wheel", "./credentials.json")
-    updater = JobWheelUpdate().insert(google_doc.get_full_dict())
+    google_sheet = Jobs("JS Job Wheel", "./credentials.json")
+    updater = JobWheelUpdate().insert(google_sheet.get_full_dict())
     return redirect("/")
 
 
 @app.route("/_get_data")
 def get_data():
     member_name = request.args.get("name", type=str)
-    data = JobWheelUpdate().retrieve()["Assigned jobs"][member_name]
-    return jsonify(result=data)
+    job_wheel_info = data["Assigned jobs"][member_name]
+    return jsonify(result=job_wheel_info)
 
 
 if __name__ == "__main__":
