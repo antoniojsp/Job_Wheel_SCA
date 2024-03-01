@@ -5,7 +5,6 @@ charset-normalizer==3.3.2
 click==8.1.7
 dnspython==2.6.0
 Flask==3.0.0
-flask-skeleton==1.0.2
 google-api-core==2.15.0
 google-api-python-client==2.113.0
 google-auth==2.26.2
