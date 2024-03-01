@@ -9,20 +9,69 @@
 </head>
 <script>
 
-<!--    $(document).ready(function(){-->
-<!--        $('#names').on('change', function hash_name(){-->
-<!--            var member = $('#names').val();-->
-<!--            console.log(name)-->
+    $(document).ready(function(){
+        $('#names').on('change', function hash_name(){
+            var member = $('#names').val();
+            console.log(name)
 
-<!--            $.getJSON( "/_get_data",-->
-<!--              {name: member},-->
-<!--              function(data) {-->
-<!--                    server_response = data.result;-->
-<!--                    console.log(server_response);-->
-<!--              });-->
+            $.getJSON( "/_get_data",
+              {name: member},
+              function(data) {
+                    server_response = data.result;
+                    var categories = {"Coord":null,
+                                      "Weekly":null,
+                                      "Monday":null,
+                                      "Tuesday":null,
+                                      "Wednesday":null,
+                                      "Thursday":null,
+                                      "Friday":null,
+                                      "Saturday":null,
+                                      "Sunday":null}
+                    var html = ""
+                    for(i in server_response){
+                        if(i == "Coord"){
+                            html += "<h2>"+ i+"</h2><br>"
+                        };
 
-<!--        });-->
-<!--    });-->
+                        if(i == "Weekly"){
+                            html += "<h2>"+ i+"</h2><br>"
+                        }
+
+                        if(i == "Monday"){
+                            html += "<h2>"+ i+"</h2><br>"
+                        }
+
+                        if(i == "Tuesday"){
+                            html += "<h2>"+ i+"</h2><br>"
+                        }
+
+                        if(i == "Wednesday"){
+                            html += "<h2>"+ i+ "</h2><br>"
+                        }
+
+                        if(i == "Thursday"){
+                            html += "<h2>"+ i + "</h2><br>"
+                        }
+
+                        if(i == "Friday"){
+                            html += "<h2>"+ i+ "</h2><br>"
+                        }
+
+                        if(i == "Saturday"){
+                            html += "<h2>"+ i+ "</h2><br>"
+                        }
+
+                        if(i == "Sunday"){
+                            html += "<h2>"+ i+ "</h2><br>"
+                        }
+
+                    }
+                    console.log(html)
+                    $("#response").html(html);
+              });
+
+        });
+    });
 
 </script>
 <body>
@@ -33,8 +82,11 @@
         <option value="{{ name }}">{{ name }}</option>
         {% endfor %}
     </select>
+    <div id="response"></div>
 
     <p><a href="{{ url_for('update_job_wheel') }}">Update current Job Wheel List</a></p>
+
+
 
 </body>
 </html>

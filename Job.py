@@ -148,5 +148,5 @@ class Jobs:
         return data_term
 
 
-a = Jobs("JS Job Wheel", "./credentials.json")
-pprint(a.get_full_dict())
+# a = Jobs("JS Job Wheel", "./credentials.json")
+# pprint(a.get_full_dict())

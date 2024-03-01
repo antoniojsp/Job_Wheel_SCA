@@ -27,7 +27,7 @@ def update_job_wheel():
 @app.route("/_get_data")
 def get_data():
     member_name = request.args.get("name", type=str)
-    data = JobWheelUpdate().retrieve()[member_name]
+    data = JobWheelUpdate().retrieve()["Assigned jobs"][member_name]
     return jsonify(result=data)
 
 
