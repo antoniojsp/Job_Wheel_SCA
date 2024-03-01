@@ -91,7 +91,8 @@ class Jobs:
                                             "Saturday",
                                             "Sunday",
                                             "Biweekly",
-                                            "Weekly"]:
+                                            "Weekly",
+                                            "Biweekly"]:
                 day = day.capitalize()
             else:
                 day = "Coord"  # if it's not a day of the week or weekly/bi-weekly job, then is a coord job.
@@ -148,5 +149,5 @@ class Jobs:
         return data_term
 
 
-# a = Jobs("JS Job Wheel", "./credentials.json")
-# pprint(a.get_full_dict())
+a = Jobs("JS Job Wheel", "./credentials.json")
+pprint(a.get_full_dict())
