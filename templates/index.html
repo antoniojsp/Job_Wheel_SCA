@@ -43,7 +43,8 @@
                                 html += "<li> <b>Job:</b> "+ server_response[i][j][0] + " -> " + server_response[i][j][1] + " <b>" + points + ".</b> </li><br>";
                             };
                         };
-                        html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + "</li>";
+
+                        html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
 
                         $("#response").html(html);
                   });
@@ -64,7 +65,9 @@
             }
 
             #content-wrap {
-              padding-bottom: 2.5rem;    /* Footer height */
+              padding-bottom: 2.7 rem;    /* Footer height */
+              padding-left: 80px;
+
             }
 
             #footer {
@@ -108,16 +111,12 @@
 
 <div id="page-container">
     <div id="content-wrap">
-
-
         <label for="names">Name: </label>
         <select id="names">
             {% for name in names %}
             <option value="{{ name }}" >{{ name }}</option>
             {% endfor %}
         </select>
-
-
         <div id="response"></div>
     </div>
 <footer id="footer" class="panel panel-primary">
