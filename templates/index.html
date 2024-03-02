@@ -9,21 +9,100 @@
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+
+    <style>
+
+
+        body{
+            min-height: 300px;
+            margin-bottom: 100px;
+        }
+
+        h3{
+          font-size: 20px;
+        }
+
+        #page-container {
+           min-height: 100vh;
+           position: relative;
+        }
+
+        #content-wrap {
+          padding-bottom: 3.7 rem;    /* Footer height */
+          padding-left: 80px;
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+        .footer,
+        .push {
+          height: 50px;
+        }
+
+        footer {
+            background: #42A5F5;
+            position: fixed;
+            padding: 10px 10px 0px 10px;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+
+            color: white;
+        }
+
+        .content {
+          padding: 20px;
+          min-height: 120%;
+          margin: 0 auto -50px;
+        }
+
+        select{
+            margin-bottom:5px;
+        }
+
+        #header_title{
+        background: #42A5F5;
+        }
+
+        a {
+              color: white;
+            }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
     <script>
 
+        window.onbeforeunload = function () {
+          window.scrollTo(0, 0);
+        }
+        var global;
+        (function lista(){
+            $.getJSON("/_get_dictionary",
+              {},
+              function(data) {
+                    nombres = data.result["Members names"].sort();
+                    var html = "";
+                    for (i of nombres){
+                        html += '<option value="' + i + '">' + i + '</option>';
+                    };
+
+                    function populate(selector, string) {
+                      $(selector).append(string);
+                    }
+                    populate('#names', html);
+                    global =  data.result
+              });
+        })();
+
         $(document).ready(function(){
-
-
-
-            $('#names').on('change', function hash_name(){
+            $('#names').on( "change", function(){
                 var member = $('#names').val();
-                console.log(name)
-
-                $.getJSON( "/_get_data",
-                  {name: member},
-                  function(data) {
-                        server_response = data.result;
-                        var list_times = ["Coord",
+                server_response = global["Assigned jobs"][member];
+                var list_times = ["Coord",
                                           "Weekly",
                                           "Biweekly",
                                           "Monday",
@@ -32,111 +111,70 @@
                                           "Thursday",
                                           "Friday",
                                           "Saturday",
-                                          "Sunday"]
+                                          "Sunday"];
 
-                        var categories = {}
-                        for (i of list_times){
-                            if(server_response[i]){
-                                categories[i] = server_response[i]
-                            }
+                    var categories = {}
+                    for (i of list_times){
+                        if(server_response[i]){
+                            categories[i] = server_response[i]
                         }
-                        var html = ""
-                        for(i in categories){
-                            html += "<h3>"+ i+":</h3><br>"
-                            for (j in server_response[i]){
-                                var points = server_response[i][j][1] > 1 ? "Points":"Point";
-
-                                html += "<li> <b>Job:</b> "+ server_response[i][j][0] + " -> " + server_response[i][j][1] + " <b>" + points + ".</b> </li><br>";
-                            };
+                    }
+                    var html = ""
+                    for(i in categories){
+                        html += "<h3>"+ i+":</h3><br>"
+                        for (j in server_response[i]){
+                            var points = server_response[i][j][1] > 1 ? "Points":"Point";
+                            html += "<li>" + server_response[i][j][0] + ", " + server_response[i][j][1] + " <b>" + points + ".</b> </li><br>";
                         };
+                    };
 
-                        html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
-
-                        $("#response").html(html);
-                  });
-
+                    html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
+                    console.log(html);
+                    $("#response").html(html);
             });
+
         });
 
     </script>
-
-        <style>
-            h3{
-                font-size: 20px;
-            }
-
-           #page-container {
-              position: relative;
-              min-height: 100vh;
-            }
-
-            #content-wrap {
-              padding-bottom: 2.7 rem;    /* Footer height */
-              padding-left: 80px;
-
-            }
-
-            #footer {
-              position: absolute;
-              bottom: 0;
-              width: 100%;
-              height: 2.5rem;            /* Footer height */
-              background-color: green;
-            }
-
-            #response {
-              padding-bottom: 2.7 rem;
-              position: relative;
-
-            }
-        </style>
-    </head>
-    <body>
-<!--    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://eugenesca.com/">SCA Page</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://eugenesca.com/js_wiki/">JS SCA Wiki</a>
-          </li>
-        </ul>
-      </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://eugenesca.com/">SCA Page</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://eugenesca.com/js_wiki/">JS SCA Wiki</a>
+                </li>
+            </ul>
+        </div>
     </nav>
+    <div id="content">
+        <div id="header_title" class="container text-center p-5 my-5 text-white ">
+            <h1>Janet Smith's <b>"{{ title }}"</b> Job Wheel</h1>
+        </div>
 
-    <div id="header_title" class="container text-center p-5 my-5 bg-success text-white ">
-        <h1>Janet Smith's <b>"{{ title }}"</b> Job Wheel</h1>
+        <div id="content-wrap">
+            <div id="page-container">
+                <label for='names'>Name: </label>
+                <select id='names'>
+                    <option selected="true" disabled="disabled">Choose name</option>
+<!--                    generated by js-->
+                </select>
+                <div id="response"></div>
+            </div>
+        </div>
     </div>
 
-
-
-<div id="page-container">
-    <div id="content-wrap">
-        <label for="names">Name: </label>
-        <select id="names">
-            {% for name in names %}
-            <option value="{{ name }}" >{{ name }}</option>
-            {% endfor %}
-        </select>
-        <div id="response"></div>
-    </div>
-    <footer id="footer" class="panel panel-primary">
+    <footer id="footer" class="panel text-white">
         <p><a href="{{ url_for('update_job_wheel') }}">Update current Job Wheel List</a></p>
     </footer>
-</div>
-
-
 
 </body>
+
 </html>

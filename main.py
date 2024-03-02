@@ -10,11 +10,10 @@ data = JobWheelUpdate().retrieve()
 
 @app.route("/")
 def index():
-    # pprint(data)
     names = data["Members names"]
     titles = data["Current term name"]
     names = sorted(names)
-    # print(names)
+
     return render_template('index.html',
                            title=titles,
                            names=names)
@@ -30,9 +29,14 @@ def update_job_wheel():
 @app.route("/_get_data")
 def get_data():
     member_name = request.args.get("name", type=str)
-    job_wheel_info = data["Assigned jobs"][member_name]
-    return jsonify(result=job_wheel_info)
+    job_wheel_info = data["Assigned jobs"]
+    return jsonify(result=job_wheel_info[member_name])
 
+@app.route("/_get_dictionary")
+def get_dictonary():
+    job_wheel_info = dict(data)
+    del job_wheel_info['_id']
+    return jsonify(result=job_wheel_info)
 
 if __name__ == "__main__":
     app.run(debug=True)
