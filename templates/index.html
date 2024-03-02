@@ -12,6 +12,9 @@
     <script>
 
         $(document).ready(function(){
+
+
+
             $('#names').on('change', function hash_name(){
                 var member = $('#names').val();
                 console.log(name)
@@ -80,6 +83,12 @@
               height: 2.5rem;            /* Footer height */
               background-color: green;
             }
+
+            #response {
+              padding-bottom: 2.7 rem;
+              position: relative;
+
+            }
         </style>
     </head>
     <body>
@@ -122,9 +131,9 @@
         </select>
         <div id="response"></div>
     </div>
-<footer id="footer" class="panel panel-primary">
-    <p><a href="{{ url_for('update_job_wheel') }}">Update current Job Wheel List</a></p>
-</footer>
+    <footer id="footer" class="panel panel-primary">
+        <p><a href="{{ url_for('update_job_wheel') }}">Update current Job Wheel List</a></p>
+    </footer>
 </div>
 
 
