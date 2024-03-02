@@ -32,11 +32,13 @@ def get_data():
     job_wheel_info = data["Assigned jobs"]
     return jsonify(result=job_wheel_info[member_name])
 
+
 @app.route("/_get_dictionary")
 def get_dictonary():
     job_wheel_info = dict(data)
     del job_wheel_info['_id']
     return jsonify(result=job_wheel_info)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
