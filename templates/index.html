@@ -11,8 +11,6 @@
 
 
     <style>
-
-
         body{
             min-height: 400px;
             margin-bottom: 200px;
@@ -127,10 +125,10 @@ body {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script>
-
         window.onbeforeunload = function () {
           window.scrollTo(0, 0);
         }
+
         var global;
         (function lista(){
             $.getJSON("/_get_dictionary",
@@ -141,7 +139,7 @@ body {
                     for (i of nombres){
                         html += '<option value="' + i + '">' + i + '</option>';
                     };
-
+                    html += '<option value="No assigned jobs">No assigned jobs</option>'
                     function populate(selector, string) {
                       $(selector).append(string);
                     }
@@ -153,17 +151,22 @@ body {
         $(document).ready(function(){
             $('#names').on( "change", function(){
                 var member = $('#names').val();
-                server_response = global["Assigned jobs"][member];
-                var list_times = ["Coord",
-                                          "Weekly",
-                                          "Biweekly",
-                                          "Monday",
-                                          "Tuesday",
-                                          "Wednesday",
-                                          "Thursday",
-                                          "Friday",
-                                          "Saturday",
-                                          "Sunday"];
+                var html = "";
+                if (member == "No assigned jobs"){
+                    server_response = global["No assigned jobs"];
+                    for (job of server_response["Jobs"]){
+                        var day = job[0];
+                        var job_name = job[1];
+                        var points = job[2]
+                        var plural = points > 1 ? "Points":"Point";
+                        html += "<li>" + day + ", " + job_name + ", <b>" +  points + " " + plural + ".</b> </li><br>";
+                    };
+
+                html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
+
+                }else{
+                    server_response = global["Assigned jobs"][member];
+                    var list_times = ["Coord", "Weekly", "Biweekly", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
                     var categories = {}
                     for (i of list_times){
@@ -171,7 +174,7 @@ body {
                             categories[i] = server_response[i]
                         }
                     }
-                    var html = ""
+
                     for(i in categories){
                         html += "<h3>"+ i+":</h3><br>"
                         for (j in server_response[i]){
@@ -181,13 +184,16 @@ body {
                     };
 
                     html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
-                    console.log(html);
-                    $("#response").html(html);
+                 }
+
+                $("#response").html(html);
+
             });
 
         });
 
     </script>
+
 
     <div class="header">
         <h2>Janet Smith's <b>"{{ title }}"</b> Job Wheel</h2>
@@ -197,7 +203,6 @@ body {
         <a href="https://eugenesca.com/js_wiki/">JS Wiki</a>
       </div>
     </div>
-
 
     <div id="content">
 

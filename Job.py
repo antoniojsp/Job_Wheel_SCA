@@ -29,7 +29,6 @@ class Jobs:
         self.assigned_jobs = {"Total points": 0}  # hold the info from each member and their jobs
         #  different storage for no assigned jobs
         self.no_assigned_jobs = {"Jobs": [], "Total points": 0}
-
         #  connect to google spreadsheet
         self.gc = gspread.service_account(filename=credentials_location)
         self.sheet = self.gc.open(title)  # title: title of the spreadsheet to use
@@ -42,7 +41,7 @@ class Jobs:
         #  pull information from Google Sheets and creates the dict to be used by mongodb
         self.fill_up_from_sheet()
 
-    def get_points(self)->int:
+    def get_points(self) -> int:
         '''
         gets the sum of all the points of ALL the jobs (assigned and unassigned)
         :return: INT
@@ -71,7 +70,6 @@ class Jobs:
             day = row[1]
             name = row[5].strip()
             points = row[4]
-
             '''
             If points are not presented, it catch the error and set it to zero,
             '''
@@ -81,10 +79,9 @@ class Jobs:
                 points = 0
 
             if not name or name == "NA":
-                name ="No assigned jobs"
+                name = "No assigned jobs"
             else:  # if there is no name, then do not add (for now)
                 name = name.capitalize()
-
 
             if day and day.capitalize() in ["Monday",
                                             "Tuesday",
@@ -99,7 +96,6 @@ class Jobs:
                 day = day.capitalize()
             else:
                 day = "Coord"  # if it's not a day of the week or weekly/bi-weekly job, then is a coord job.
-
             self.add_job_info(name.capitalize(), day.capitalize(), job.capitalize(), points)
 
     def add_job_info(self, name: str, day: str, job: str, points: float) -> None:
@@ -112,6 +108,7 @@ class Jobs:
         :param points: float with value of points per job
         """
         if name == "No assigned jobs":
+
             self.no_assigned_jobs["Jobs"].append((day, job, points))
             self.no_assigned_jobs["Total points"] += points
         else:
@@ -127,7 +124,7 @@ class Jobs:
             self.assigned_jobs["Total points"] += points
         self.points += points
 
-    def get_no_assigned_jobs(self)-> dict:
+    def get_no_assigned_jobs(self) -> dict:
         '''
         Gets all the unassigned jobs (day, job, points)
         :return:
@@ -148,9 +145,9 @@ class Jobs:
                      "No assigned jobs": self.no_assigned_jobs,
                      "Assigned jobs": self.assigned_jobs,
                      "General points": self.points,
-                     "Members names":list(self.names)}
+                     "Members names": list(self.names)}
         return data_term
 
-
+#
 # a = Jobs("JS Job Wheel", "./credentials.json")
 # pprint(a.get_full_dict())
