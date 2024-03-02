@@ -9,166 +9,157 @@
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <script>
 
-        var json_data;
-        //functions
-        function get_data(){
-              $.getJSON("/_get_dictionary",
-              {},
-              function(data) {
+    <style>
 
-              });
-        };
-
-        function whenDone() {
-            console.log("success!");
+        html, body {
+          height: 100%;
+          margin: 0;
         }
-        $(document).ready(function(){
-<!--            get_data()-->
-<!--            console.log(json_data);-->
+        h3{
+            font-size: 20px;
+        }
 
-<!--            var list_select_names = "";-->
-<!--            for(i in json_data["Members names"]){-->
-<!--                list_select_names += "<select id='names'><option value='"+i+"'>"+i+"</option></select>"-->
-<!--            }-->
-<!--            console.log(list_select_names);-->
-<!--            $("#names_list").html(list_select_names);-->
+       #page-container {
+          position: relative;
+          min-height: 100vh;
+        }
 
-            $('#names').on('change', function hash_name(){
+        #content-wrap {
+          padding-bottom: 3.7 rem;    /* Footer height */
+          padding-left: 80px;
 
-                var member = $('#names').val();
+        }
 
-                    $.getJSON( "/_get_data",
-                      {name: member},
-                      function(data) {
-                            server_response = data.result;
-                            var list_times = ["Coord",
-                                              "Weekly",
-                                              "Biweekly",
-                                              "Monday",
-                                              "Tuesday",
-                                              "Wednesday",
-                                              "Thursday",
-                                              "Friday",
-                                              "Saturday",
-                                              "Sunday"]
+        * {
+          box-sizing: border-box;
+        }
+                .footer,
+        .push {
+          height: 50px;
+        }
 
-                            var categories = {}
-                            for (i of list_times){
-                                if(server_response[i]){
-                                    categories[i] = server_response[i]
-                                }
-                            }
-                            var html = ""
-                            for(i in categories){
-                                html += "<h3>"+ i+":</h3><br>"
-                                for (j in server_response[i]){
-                                    var points = server_response[i][j][1] > 1 ? "Points":"Point";
+        footer {
+          background: rgb(100, 166, 78);
+          color: white;
+          line-height: 50px;
+          padding: 0 20px;
+        }
 
-                                    html += "<li> <b>Job:</b> "+ server_response[i][j][0] + " -> " + server_response[i][j][1] + " <b>" + points + ".</b> </li><br>";
-                                };
-                            };
-
-                            html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
-
-                            $("#response").html(html);
-                      });
-
-
-            });
-        });
-
-    </script>
-
-        <style>
-            h3{
-                font-size: 20px;
-            }
-
-           #page-container {
-              position: relative;
-              min-height: 100vh;
-            }
-
-            #content-wrap {
-              padding-bottom: 2.7 rem;    /* Footer height */
-              padding-left: 80px;
-
-            }
-
-            #footer {
-              position: absolute;
-              bottom: 0;
-              width: 100%;
-              height: 2.5rem;            /* Footer height */
-              background-color: green;
-            }
-
-            #response {
-              padding-bottom: 2.7 rem;
-              position: relative;
-
-            }
-        </style>
-    </head>
-    <body>
-
-
+.content {
+  padding: 20px;
+  min-height: 100%;
+  margin: 0 auto -50px;
+}
+    </style>
+</head>
+<body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
+    <script>
+
+        window.onbeforeunload = function () {
+          window.scrollTo(0, 0);
+        }
+        var global;
+        (function lista(){
+            $.getJSON("/_get_dictionary",
+              {},
+              function(data) {
+                    nombres = data.result["Members names"];
+                    var html = "";
+                    for (i of nombres){
+                        html += '<option value="' + i + '">' + i + '</option>';
+                    };
+
+                    function populate(selector, string) {
+                      $(selector).append(string);
+                    }
+
+                    populate('#names', html);
+                    global =  data.result
+              });
+        })();
+
+        $(document).ready(function(){
+            $('#names').on( "change", function(){
+                var member = $('#names').val();
+                server_response = global["Assigned jobs"][member];
+                var list_times = ["Coord",
+                                          "Weekly",
+                                          "Biweekly",
+                                          "Monday",
+                                          "Tuesday",
+                                          "Wednesday",
+                                          "Thursday",
+                                          "Friday",
+                                          "Saturday",
+                                          "Sunday"];
+
+                    var categories = {}
+                    for (i of list_times){
+                        if(server_response[i]){
+                            categories[i] = server_response[i]
+                        }
+                    }
+                    var html = ""
+                    for(i in categories){
+                        html += "<h3>"+ i+":</h3><br>"
+                        for (j in server_response[i]){
+                            var points = server_response[i][j][1] > 1 ? "Points":"Point";
+                            html += "<li>" + server_response[i][j][0] + ", " + server_response[i][j][1] + " <b>" + points + ".</b> </li><br>";
+                        };
+                    };
+
+                    html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
+                    console.log(html);
+                    $("#response").html(html);
+            });
+
+        });
+
+    </script>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://eugenesca.com/">SCA Page</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://eugenesca.com/js_wiki/">JS SCA Wiki</a>
-          </li>
-        </ul>
-      </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://eugenesca.com/">SCA Page</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://eugenesca.com/js_wiki/">JS SCA Wiki</a>
+                </li>
+            </ul>
+        </div>
     </nav>
 
     <div id="header_title" class="container text-center p-5 my-5 bg-success text-white ">
         <h1>Janet Smith's <b>"{{ title }}"</b> Job Wheel</h1>
     </div>
 
+        <div id="content-wrap">
+            <div id="page-container">
+                <label for='names'>Name: </label>
+                <select id='names'>
+                    <option selected="true" disabled="disabled">Choose name</option>
+<!--                    generated by js-->
+                </select>
+                <div id="response"></div>
 
-
-<!--        <div id="page-container">-->
-<!--            <div id="content-wrap">-->
-
-<!--            <label for="names">Name: </label>-->
-<!--&lt;!&ndash;        <select id="names">&ndash;&gt;-->
-<!--                <div id="names_list"></div>-->
-<!--&lt;!&ndash;        </select>&ndash;&gt;-->
-<!--            <div id="response"></div>-->
-<!--         </div>-->
-
-    <div id="content-wrap">
-        <label for="names">Name: </label>
-        <select id="names">
-            <option value="" disabled selected>Select your option</option>
-            {% for name in names %}
-            <option value="{{ name }}" >{{ name }}</option>
-            {% endfor %}
-        </select>
-        <div id="response"></div>
+            </div>
+        </div>
     </div>
+
     <footer id="footer" class="panel panel-primary">
         <p><a href="{{ url_for('update_job_wheel') }}">Update current Job Wheel List</a></p>
     </footer>
-</div>
-
-
 
 </body>
+
 </html>
