@@ -66,22 +66,25 @@ class Jobs:
                 row.append("")
 
             job = row[0]
+            if job == "":
+                continue
             day = row[1]
-            name = row[5]
+            name = row[5].strip()
             points = row[4]
 
             '''
-            If points are not added in the google sheet or if no numbers are added, they are set to zero.
+            If points are not presented, it catch the error and set it to zero,
             '''
             try:
                 points = float(points)
             except ValueError:
                 points = 0
 
-            if name != "NA":  # if there is no name, then do not add (for now)
+            if not name or name == "NA":
+                name ="No assigned jobs"
+            else:  # if there is no name, then do not add (for now)
                 name = name.capitalize()
-            else:
-                name = "No assigned jobs"
+
 
             if day and day.capitalize() in ["Monday",
                                             "Tuesday",
@@ -149,5 +152,5 @@ class Jobs:
         return data_term
 
 
-a = Jobs("JS Job Wheel", "./credentials.json")
-pprint(a.get_full_dict())
+# a = Jobs("JS Job Wheel", "./credentials.json")
+# pprint(a.get_full_dict())
