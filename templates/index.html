@@ -107,6 +107,17 @@ body {
   float: right;
 }
 
+.header-right a{
+      float: left;
+      color: black;
+      text-align: center;
+      padding: 12px;
+      text-decoration: none;
+      font-size: 18px;
+      line-height: 25px;
+      border-radius: 4px;
+}
+
 @media screen and (max-width: 500px) {
   .header a {
     float: none;
@@ -197,7 +208,7 @@ body {
 
     <div class="header">
         <h2>Janet Smith's <b>"{{ title }}"</b> Job Wheel</h2>
-        <div class="header-right">
+      <div class="header-right">
         <a class="active" href="#home">Home</a>
         <a href="https://eugenesca.com/">SCA Website</a>
         <a href="https://eugenesca.com/js_wiki/">JS Wiki</a>
@@ -205,7 +216,6 @@ body {
     </div>
 
     <div id="content">
-
         <div id="content-wrap">
             <div id="page-container">
                 <label for='names'>Name: </label>

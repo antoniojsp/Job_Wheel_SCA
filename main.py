@@ -7,7 +7,6 @@ from Update_mongo import JobWheelUpdate
 app = Flask(__name__)
 data = JobWheelUpdate().retrieve()
 
-
 @app.route("/")
 def index():
     titles = data["Current term name"]
