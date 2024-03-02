@@ -14,12 +14,8 @@ class JobWheelUpdate:
         self.collection.insert_one(info)
 
     def retrieve(self):
-        a = self.collection.find().limit(1).sort([('$natural', -1)])
-        temp = None
-        for i in a:
-            temp = i
-
-        return temp
+        last_entry = self.collection.find().limit(1).sort([('$natural', -1)])
+        return [i for i in last_entry][0]
 
 # a = Jobs("JS Job Wheel", "./credentials.json")
 # b = JobWheelUpdate()
