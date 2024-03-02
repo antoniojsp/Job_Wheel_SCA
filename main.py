@@ -23,7 +23,6 @@ def index():
 @app.route("/update")
 def update_job_wheel():
     google_sheet = Jobs("JS Job Wheel", "./credentials.json")
-    # pprint(google_sheet.get_full_dict())
     updater = JobWheelUpdate().insert(google_sheet.get_full_dict())
     return redirect("/")
 
