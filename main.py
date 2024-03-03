@@ -2,14 +2,15 @@ from flask import Flask, render_template, redirect, jsonify
 from update import JobWheelUpdate
 from member_jobs import MemberJobs
 from gather_cells import GatherCells
+
 app = Flask(__name__)
 
-current_raw_data = GatherCells(title="JS Job Wheel").get_cells_data()
+current_raw_data = JobWheelUpdate().retrieve()
 
 @app.route("/")
 def index():
     return render_template('index.html',
-                           title=current_raw_data[0])
+                           title=current_raw_data['Current term name'])
 
 
 @app.route("/update")
@@ -21,6 +22,8 @@ def update_job_wheel():
     cells = GatherCells(title="JS Job Wheel").get_cells_data()
     google_sheet = MemberJobs(cells)
     JobWheelUpdate().insert(google_sheet.get_full_dict())
+    global current_raw_data
+    current_raw_data = JobWheelUpdate().retrieve()
     return redirect("/")
 
 
@@ -31,8 +34,7 @@ def get_dictionary():
     JS
     :return:
     """
-    job_wheel_info = JobWheelUpdate().retrieve()
-    return jsonify(result=job_wheel_info)
+    return jsonify(result=current_raw_data)
 
 
 if __name__ == "__main__":
