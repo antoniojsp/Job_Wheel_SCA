@@ -8,9 +8,8 @@ current_raw_data = GatherCells(title="JS Job Wheel").get_cells_data()
 
 @app.route("/")
 def index():
-    titles = current_raw_data[0]
     return render_template('index.html',
-                           title=titles)
+                           title=current_raw_data[0])
 
 
 @app.route("/update")
