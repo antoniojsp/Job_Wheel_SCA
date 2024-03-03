@@ -1,6 +1,6 @@
 from pprint import pprint
 
-from gather_cells import GatherCells
+from gather_cells import GatherCellsFromGoogle
 
 
 class CreateSchedule:
@@ -36,6 +36,6 @@ class CreateSchedule:
         return self.week
 
 
-cells = GatherCells(title="JS Job Wheel").get_cells_data()
+cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
 a = CreateSchedule(cells).create()
 pprint(a)

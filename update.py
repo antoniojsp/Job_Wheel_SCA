@@ -3,7 +3,7 @@ from pymongo.server_api import ServerApi
 import os
 
 
-class JobWheelUpdate:
+class ConnectMongoDB:
     def __init__(self):
         uri = os.environ['uri']
         self.client = MongoClient(uri, server_api=ServerApi('1'))

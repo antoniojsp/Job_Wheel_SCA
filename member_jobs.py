@@ -1,6 +1,6 @@
 from pprint import pprint
 
-from gather_cells import GatherCells
+from gather_cells import GatherCellsFromGoogle
 
 
 class MemberJobs:

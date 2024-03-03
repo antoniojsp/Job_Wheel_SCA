@@ -2,7 +2,7 @@ import gspread
 import credentials
 
 
-class GatherCells:
+class GatherCellsFromGoogle:
     def __init__(self, title):
         self.gc = gspread.service_account_from_dict(credentials.credentials)
         self.sheet = self.gc.open(title)  # title: title of the spreadsheet to use
