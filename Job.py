@@ -1,5 +1,7 @@
 import gspread
 from pprint import pprint
+import os
+import credentials
 
 '''
 Eventually, I will need to make a proper database (mongodb or sql) to storage
@@ -29,8 +31,10 @@ class Jobs:
         self.assigned_jobs = {"Total points": 0}  # hold the info from each member and their jobs
         #  different storage for no assigned jobs
         self.no_assigned_jobs = {"Jobs": [], "Total points": 0}
+        print(credentials.credentials["private_key"])
         #  connect to google spreadsheet
-        self.gc = gspread.service_account(filename=credentials_location)
+        self.gc = gspread.service_account_from_dict(credentials.credentials)
+
         self.sheet = self.gc.open(title)  # title: title of the spreadsheet to use
         #  get all the sheet names but we use the first one that it's the current term.
         self.current_sheet_name = self.get_sheet_names()[0]
@@ -148,6 +152,7 @@ class Jobs:
                      "Members names": list(self.names)}
         return data_term
 
+
 #
-# a = Jobs("JS Job Wheel", "./credentials.json")
-# pprint(a.get_full_dict())
+a = Jobs("JS Job Wheel", "./credentials.json")
+pprint(a.get_full_dict())

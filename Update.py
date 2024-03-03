@@ -1,11 +1,13 @@
 from pprint import pprint
-
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
+import os
+from Job import Jobs
+
 
 class JobWheelUpdate:
     def __init__(self):
-        uri = "mongodb+srv://petiteurl:antonio12@cluster0.1ra6dk3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+        uri = os.environ['uri']
         self.client = MongoClient(uri, server_api=ServerApi('1'))
         self.db = self.client["SCA_Job_Wheel"]
         self.collection = self.db["Jobs_points"]
@@ -15,8 +17,11 @@ class JobWheelUpdate:
 
     def retrieve(self):
         last_entry = self.collection.find().limit(1).sort([('$natural', -1)])
-        return [i for i in last_entry][0]
+        result = [i for i in last_entry][0]
+        del result['_id']  # delete "_id" since 'Object of type ObjectId is not JSON serializable'
+        return result
 
 # a = Jobs("JS Job Wheel", "./credentials.json")
 # b = JobWheelUpdate()
+# pprint(JobWheelUpdate().retrieve())
 # b.insert(a.get_full_dict())
