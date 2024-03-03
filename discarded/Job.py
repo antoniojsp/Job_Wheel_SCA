@@ -24,7 +24,7 @@ data_term = {"Current term name": "name of the current term,
 '''
 
 
-class JobsSchedule:
+class Jobs:
     def __init__(self, sheet_title: str):
         #  initialize storage
         self.assigned_jobs = {"Total points": 0}  # hold the info from each member and their jobs

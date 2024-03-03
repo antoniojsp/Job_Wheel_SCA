@@ -1,14 +1,14 @@
-from pprint import pprint
 from flask import Flask, render_template, redirect, jsonify
-from Job import JobsSchedule
-from Update import JobWheelUpdate
+from update import JobWheelUpdate
+from member_jobs import MemberJobs
+from gather_cells import GatherCells
 app = Flask(__name__)
-data = JobWheelUpdate().retrieve()
 
+current_raw_data = GatherCells(title="JS Job Wheel").get_cells_data()
 
 @app.route("/")
 def index():
-    titles = data["Current term name"]
+    titles = current_raw_data[0]
     return render_template('index.html',
                            title=titles)
 
@@ -19,7 +19,8 @@ def update_job_wheel():
     google_sheet gets all the data from Google Sheets and transform it into a dictionary
     to be stored by JobWheelUpdate().insert() in MongoDB
     """
-    google_sheet = JobsSchedule(sheet_title="JS Job Wheel")
+    cells = GatherCells(title="JS Job Wheel").get_cells_data()
+    google_sheet = MemberJobs(cells)
     JobWheelUpdate().insert(google_sheet.get_full_dict())
     return redirect("/")
 
