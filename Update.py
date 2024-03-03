@@ -2,7 +2,7 @@ from pprint import pprint
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import os
-from Job import Jobs
+from Job import JobsSchedule
 
 
 class JobWheelUpdate:
