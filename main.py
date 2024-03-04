@@ -8,7 +8,11 @@ from update import ConnectMongoDB
 
 app = Flask(__name__)
 
-current_information_from_mongo = ConnectMongoDB().retrieve()
+
+try:
+    current_information_from_mongo = ConnectMongoDB().retrieve()
+except ValueError as err:
+    current_information_from_mongo = ConnectMongoDB().update_database()
 
 
 @app.route("/")
@@ -23,18 +27,8 @@ def update_job_wheel():
     google_sheet gets all the data from Google Sheets and transform it into a dictionary
     to be stored by JobWheelUpdate().insert() in MongoDB
     """
-    cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
-    members_job_dictionary = MemberJobs(cells).get_full_dict()  # convert the cells in a dictionary with all the information
-    schedule_dictionary = CreateSchedule(cells).get_schedule()
-    product = {
-        "members_job":members_job_dictionary,
-        "schedule": schedule_dictionary
-    }
-    pprint(product)
-
-    ConnectMongoDB().insert(product)
     global current_information_from_mongo
-    current_information_from_mongo = ConnectMongoDB().retrieve()  # updates the global variable, same information for all users
+    current_information_from_mongo = ConnectMongoDB().update_database()
     return redirect("/")  # return to the index
 
 
