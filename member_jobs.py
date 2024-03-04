@@ -8,7 +8,6 @@ class MemberJobs:
         self.assigned_jobs = {"Total points": 0}  # hold the info from each member and their jobs
         #  different storage for no assigned jobs
         self.no_assigned_jobs = {"Jobs": [], "Total points": 0}
-        #  connect to google spreadsheet
         #  current term's sheet name
         self.current_sheet_name = data[0]
         #  keep track of the total points of all the jobs (assigned and no assigned)

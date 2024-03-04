@@ -15,11 +15,10 @@ class ConnectMongoDB:
         self.db = self.client["SCA_Job_Wheel"]
         self.collection = self.db["Jobs_points"]
 
-    def insert(self, info: dict):
-        self.collection.insert_one(info)
-
     def update_database(self):
-        cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
+
+        cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()  # raw data
+        # forming dictionary
         members_job_dictionary = MemberJobs(
             cells).get_full_dict()  # convert the cells in a dictionary with all the information
         schedule_matrix = CreateSchedule(cells).get_schedule_matrix()
@@ -27,7 +26,7 @@ class ConnectMongoDB:
             "members_job": members_job_dictionary,
             "schedule_matrix": schedule_matrix
         }
-        self.insert(product)
+        self.collection.insert_one(product)
         return self.retrieve()
 
     def retrieve(self):
@@ -36,11 +35,9 @@ class ConnectMongoDB:
         number_documents = len(result)
         if number_documents == 0:  # if 0, database has no records and needs to be restored.
             raise ValueError("The database is empty and needs to be restored.")
-
         last_document = result[0]
         del last_document['_id']  # delete "_id" since 'Object of type ObjectId is not JSON serializable'
         return last_document
-
 
 # cells = GatherCellsFromGoogle("JS Job Wheel").get_cells_data()
 # members_job_dictionary = MemberJobs(cells).get_full_dict()  # convert the cells in a dictionary with all the information
