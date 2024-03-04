@@ -12,33 +12,50 @@ class CreateSchedule:
                      "Friday": {"Morning": [], "Day": [], "Night": []},
                      "Saturday": {"Morning": [], "Day": [], "Night": []}
                      }
+
+        self.matrix = []
+
         self.data = data
-        self.create_schedule()
+        self.create_schedule_dictionary()
+        self.create_schedule_matrix()
 
-    '''
-    TODO adapt to new gather cells
-    '''
-    def create_schedule(self):
+    def create_schedule_dictionary(self) -> None:
+
         for job, day, points, name in self.data[1:]:  # first line holds the name of the term
-            day = day.lower().strip()
-            job = job.lower().strip()
-            name = name.lower().strip()
-            if day in ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]:
-                day = day.capitalize()
-                name = name.capitalize()
+            # print(job, day, points, name)
+            if day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]:
                 match job:
-                    case "am dishes":
-                        self.week[day.capitalize()]["Morning"].append((job.capitalize(), name, points))
-                    case "day dishes":
-                        self.week[day.capitalize()]["Day"].append((job.capitalize(), name, points))
-                    case "night dishes":
-                        self.week[day.capitalize()]["Night"].append((job.capitalize(), name, points))
+                    case "Am dishes":
+                        self.week[day]["Morning"].append((name))
+                    case "Day dishes":
+                        self.week[day]["Day"].append((name))
+                    case "Night dishes":
+                        self.week[day]["Night"].append((name))
+
+    """
+    TODO
+    """
+
+    def create_schedule_matrix(self) -> None:
+        days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        hours = ["Time", "Morning", "Day", "Night", "Night"]
+        self.matrix.append(hours)
+        for i in days:
+            temp = [i]
+            current = self.get_schedule_dict()[i]
+            for index, val in current.items():
+                temp += val
+            self.matrix.append(temp)
+
+        self.matrix = list(zip(*self.matrix))
+
+    def get_schedule_dict(self):
         return self.week
 
-    def get_schedule(self):
-        return self.week
-
+    def get_schedule_matrix(self):
+        return self.matrix
 
 # cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
 # a = CreateSchedule(cells)
-# pprint(a.get_schedule())
+# # pprint(a.get_schedule_dict())
+# pprint(a.get_schedule_matrix())

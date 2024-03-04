@@ -1,9 +1,6 @@
 from pprint import pprint
 
-from create_schedule import CreateSchedule
 from flask import Flask, render_template, redirect, jsonify
-from gather_cells import GatherCellsFromGoogle
-from member_jobs import MemberJobs
 from update import ConnectMongoDB
 
 app = Flask(__name__)
@@ -22,7 +19,7 @@ def index():
 
 
 @app.route("/update")
-def update_job_wheel():
+def update():
     """
     google_sheet gets all the data from Google Sheets and transform it into a dictionary
     to be stored by JobWheelUpdate().insert() in MongoDB
