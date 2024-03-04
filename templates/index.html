@@ -142,12 +142,10 @@
 
         var global;
         (function lista(){
-            console.log("json");
             $.getJSON("/_get_dictionary",
               {},
               function(data) {
                     json_package = data.result;
-                    console.log(json_package);
                     members_data = json_package["members_job"];
 
                     schedule_data = data.result["schedule"];
@@ -166,8 +164,22 @@
                     $("#title").html(title);
                     populate('#names', html);
                     global =  members_data
+
+                    schedule(schedule_data);
               });
         })();
+
+
+        function schedule(){
+
+            days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
+            'Sunday']
+
+
+
+
+            return "Hola";
+        }
 
         $(document).ready(function(){
             $('#names').on( "change", function(){
