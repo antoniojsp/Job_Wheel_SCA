@@ -1,6 +1,8 @@
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import os
+
+from create_schedule import CreateSchedule
 from gather_cells import GatherCellsFromGoogle
 from member_jobs import MemberJobs
 
@@ -23,8 +25,14 @@ class ConnectMongoDB:
         return result
 
 
-a = GatherCellsFromGoogle("JS Job Wheel").get_cells_data()
-b = MemberJobs(a).get_full_dict()
-product = ConnectMongoDB()
-product.insert(b)
-print(product.retrieve())
+# cells = GatherCellsFromGoogle("JS Job Wheel").get_cells_data()
+# members_job_dictionary = MemberJobs(cells).get_full_dict()  # convert the cells in a dictionary with all the information
+# schedule_dictionary = CreateSchedule(cells).get_schedule()
+# product = {
+#     "members_job": members_job_dictionary,
+#     "schedule": schedule_dictionary
+# }
+#
+# mongo_conn = ConnectMongoDB()
+# mongo_conn.insert(product)
+# print(mongo_conn.retrieve())
