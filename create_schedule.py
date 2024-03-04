@@ -13,13 +13,13 @@ class CreateSchedule:
                      "Saturday": {"Morning": [], "Day": [], "Night": []}
                      }
         self.data = data
+        self.create_schedule()
 
     '''
     TODO adapt to new gather cells
     '''
-    def create(self):
-        print(self.data)
-        for job, day, points, name in self.data[1:]:
+    def create_schedule(self):
+        for job, day, points, name in self.data[1:]:  # first line holds the name of the term
             day = day.lower().strip()
             job = job.lower().strip()
             name = name.lower().strip()
@@ -35,7 +35,10 @@ class CreateSchedule:
                         self.week[day.capitalize()]["Night"].append((job.capitalize(), name, points))
         return self.week
 
+    def get_schedule(self):
+        return self.week
+
 
 # cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
-# a = CreateSchedule(cells).create()
-# pprint(a)
+# a = CreateSchedule(cells)
+# pprint(a.get_schedule())

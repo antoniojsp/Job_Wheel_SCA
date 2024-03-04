@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from create_schedule import CreateSchedule
 from flask import Flask, render_template, redirect, jsonify
 from gather_cells import GatherCellsFromGoogle
@@ -12,7 +14,7 @@ current_information_from_mongo = ConnectMongoDB().retrieve()
 @app.route("/")
 def index():
     return render_template('index.html',
-                           title=current_information_from_mongo['Current term name'])
+                           title=current_information_from_mongo["members_job"]['Current term name'])
 
 
 @app.route("/update")
@@ -22,9 +24,15 @@ def update_job_wheel():
     to be stored by JobWheelUpdate().insert() in MongoDB
     """
     cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
-    google_sheet_dictionary = MemberJobs(cells)  # convert the cells in a dictionary with all the information
+    members_job_dictionary = MemberJobs(cells).get_full_dict()  # convert the cells in a dictionary with all the information
+    schedule_dictionary = CreateSchedule(cells).get_schedule()
+    product = {
+        "members_job":members_job_dictionary,
+        "schedule": schedule_dictionary
+    }
+    pprint(product)
 
-    ConnectMongoDB().insert(google_sheet_dictionary.get_full_dict())
+    ConnectMongoDB().insert(product)
     global current_information_from_mongo
     current_information_from_mongo = ConnectMongoDB().retrieve()  # updates the global variable, same information for all users
     return redirect("/")  # return to the index

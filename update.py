@@ -1,12 +1,15 @@
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import os
+from gather_cells import GatherCellsFromGoogle
+from member_jobs import MemberJobs
 
 
 class ConnectMongoDB:
     def __init__(self):
         uri = os.environ['uri']
-        self.client = MongoClient(uri, server_api=ServerApi('1'))
+        # self.client = MongoClient(uri, server_api=ServerApi('1'))  # atlas
+        self.client = MongoClient()  # local, just for testing
         self.db = self.client["SCA_Job_Wheel"]
         self.collection = self.db["Jobs_points"]
 
@@ -19,7 +22,9 @@ class ConnectMongoDB:
         del result['_id']  # delete "_id" since 'Object of type ObjectId is not JSON serializable'
         return result
 
-# a = Jobs("JS Job Wheel", "./credentials.json")
-# b = JobWheelUpdate()
-# pprint(JobWheelUpdate().retrieve())
-# b.insert(a.get_full_dict())
+
+# a = GatherCellsFromGoogle("JS Job Wheel").get_cells_data()
+# b = MemberJobs(a).get_full_dict()
+# product = ConnectMongoDB()
+# product.insert(b)
+# print(product.retrieve())
