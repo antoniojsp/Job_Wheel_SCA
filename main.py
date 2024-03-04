@@ -1,7 +1,8 @@
+from create_schedule import CreateSchedule
 from flask import Flask, render_template, redirect, jsonify
-from update import ConnectMongoDB
-from member_jobs import MemberJobs
 from gather_cells import GatherCellsFromGoogle
+from member_jobs import MemberJobs
+from update import ConnectMongoDB
 
 app = Flask(__name__)
 
@@ -22,6 +23,7 @@ def update_job_wheel():
     """
     cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
     google_sheet_dictionary = MemberJobs(cells)  # convert the cells in a dictionary with all the information
+
     ConnectMongoDB().insert(google_sheet_dictionary.get_full_dict())
     global current_information_from_mongo
     current_information_from_mongo = ConnectMongoDB().retrieve()  # updates the global variable, same information for all users

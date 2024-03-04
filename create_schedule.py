@@ -18,7 +18,8 @@ class CreateSchedule:
     TODO adapt to new gather cells
     '''
     def create(self):
-        for job, day, points, name in self.data:
+        print(self.data)
+        for job, day, points, name in self.data[1:]:
             day = day.lower().strip()
             job = job.lower().strip()
             name = name.lower().strip()
@@ -35,6 +36,6 @@ class CreateSchedule:
         return self.week
 
 
-cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
-a = CreateSchedule(cells).create()
-pprint(a)
+# cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
+# a = CreateSchedule(cells).create()
+# pprint(a)
