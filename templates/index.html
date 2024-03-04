@@ -142,11 +142,15 @@
 
         var global;
         (function lista(){
-            console.log("json");
             $.getJSON("/_get_dictionary",
               {},
               function(data) {
-                    nombres = data.result["Members names"].sort();
+                    json_package = data.result;
+                    members_data = json_package["members_job"];
+
+                    schedule_data = data.result["schedule"];
+                    nombres = members_data["Members names"].sort();
+
                     var html = "";
                     for (i of nombres){
                         html += '<option value="' + i + '">' + i + '</option>';
@@ -159,9 +163,23 @@
                     var title = "<h2>Janet Smith's <b>"+ data.result["Current term name"] +"</b> Job Wheel</h2>"
                     $("#title").html(title);
                     populate('#names', html);
-                    global =  data.result
+                    global =  members_data
+
+                    schedule(schedule_data);
               });
         })();
+
+
+        function schedule(){
+
+            days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
+            'Sunday']
+
+
+
+
+            return "Hola";
+        }
 
         $(document).ready(function(){
             $('#names').on( "change", function(){
