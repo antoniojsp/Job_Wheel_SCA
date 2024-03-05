@@ -62,7 +62,6 @@ class CreateSchedule:
             # # print(temp)
             for k in temp:
                 self.schedule_per_day[i].append(temp)
-        print(result)
         return self.schedule_per_day
 
     def create_schedule_matrix(self) -> None:
