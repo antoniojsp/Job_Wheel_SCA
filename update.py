@@ -10,13 +10,16 @@ from member_jobs import MemberJobs
 class ConnectMongoDB:
     def __init__(self):
         uri = os.environ['uri']
-        self.client = MongoClient(uri, server_api=ServerApi('1'))  # atlas
-        # self.client = MongoClient()  # local, just for testing
+        # self.client = MongoClient(uri, server_api=ServerApi('1'))  # atlas
+        self.client = MongoClient()  # local, just for testing
         self.db = self.client["SCA_Job_Wheel"]
         self.collection = self.db["Jobs_points"]
 
     def update_database(self):
-
+        '''
+        Gather information from google sheets, form a dictionary and send it to mongodb
+        :return:
+        '''
         cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()  # raw data
         # forming dictionary
         members_job_dictionary = MemberJobs(
@@ -27,9 +30,12 @@ class ConnectMongoDB:
             "schedule_matrix": schedule_matrix
         }
         self.collection.insert_one(product)
-        return self.retrieve()
 
     def retrieve(self):
+        """
+        Pull the last record in mongodb to be use by the client js to display all the information
+        :return:
+        """
         last_entry = self.collection.find().limit(1).sort([('$natural', -1)])
         result = [i for i in last_entry]
         number_documents = len(result)

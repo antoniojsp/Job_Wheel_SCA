@@ -29,6 +29,6 @@ class GatherCellsFromGoogle:
             result.append([job, day, points, name])
         return result
 
-# a = GatherCells(title="JS Job Wheel").get_cells_data()
-# for i in a:
-#     print(i, sep="/n")
+a = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
+for i in a:
+    print(i, sep="/n")

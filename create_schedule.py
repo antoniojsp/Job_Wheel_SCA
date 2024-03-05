@@ -26,11 +26,11 @@ class CreateSchedule:
             if day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]:
                 match job:
                     case "Am dishes":
-                        self.week[day]["Morning"].append(name)
+                        self.week[day]["Morning"].append((name))
                     case "Day dishes":
-                        self.week[day]["Day"].append(name)
+                        self.week[day]["Day"].append((name))
                     case "Night dishes":
-                        self.week[day]["Night"].append(name)
+                        self.week[day]["Night"].append((name))
 
     """
     TODO
@@ -40,10 +40,11 @@ class CreateSchedule:
         days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         hours = ["Time", "Morning", "Day", "Night", "Night"]
         self.matrix.append(hours)
+        # print(self.get_schedule_dict())
         for i in days:
             temp = [i]
             current = self.get_schedule_dict()[i]
-            print(current)
+            # print(current)
             for index, val in current.items():
                 temp += val
             self.matrix.append(temp)
@@ -57,7 +58,8 @@ class CreateSchedule:
         return self.matrix
 
 
-cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
-a = CreateSchedule(cells)
-# pprint(a.get_schedule_dict())
-# pprint(a.get_schedule_matrix())
+# cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
+# a = CreateSchedule(cells)
+# # pprint(a.get_schedule_dict())
+# for i in a.get_schedule_matrix():
+#     print(i)

@@ -25,7 +25,10 @@ def update():
     to be stored by JobWheelUpdate().insert() in MongoDB
     """
     global current_information_from_mongo
-    current_information_from_mongo = ConnectMongoDB().update_database()
+    conn = ConnectMongoDB()
+    conn.update_database()
+    current_information_from_mongo = conn.retrieve()
+    # print(current_information_from_mongo)
     return redirect("/")  # return to the index
 
 
