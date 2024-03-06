@@ -21,14 +21,20 @@ class ConnectMongoDB:
         :return:
         '''
         cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()  # raw data
+        schedule = CreateSchedule(cells)
         # forming dictionary
         members_job_dictionary = MemberJobs(
             cells).get_full_dict()  # convert the cells in a dictionary with all the information
-        schedule_matrix = CreateSchedule(cells).get_schedule_matrix()
+        schedule_matrix = schedule.get_schedule_matrix()
+        schedule_per_day = schedule.get_schedule_dict_per_day()
         product = {
             "members_job": members_job_dictionary,
-            "schedule_matrix": schedule_matrix
+            "schedule_matrix": schedule_matrix,
+            "schedule_per_day":schedule_per_day
+
+
         }
+        print(schedule_per_day)
         self.collection.insert_one(product)
 
     def retrieve(self):

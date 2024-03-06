@@ -34,34 +34,36 @@ class CreateSchedule:
             if day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]:
                 match job:
                     case "Am dishes":
-                        self.week[day]["Morning"].append(name)
+                        self.week[day]["Morning"].append((name, job))
                     case "Day dishes":
-                        self.week[day]["Day"].append(name)
+                        self.week[day]["Day"].append((name, job))
                     case "Night dishes":
-                        self.week[day]["Night"].append(name)
+                        self.week[day]["Night"].append((name, job))
 
     def create_schedule_dict_per_day(self):
         week_days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         order_of_day = ["Morning", "Day", "Night"]
         # print(len(week_days))
         result = []
-        for i in week_days:
+        for day in week_days:
             # print(i)
-            dict_jobs_per_day = self.week[i]
+            dict_jobs_per_day = self.week[day]
             # print(dict_jobs_per_day)
             # print()
             temp = []
-            for j in order_of_day:
-                print(dict_jobs_per_day)
-                print(dict_jobs_per_day[j])
-                for k in dict_jobs_per_day[j]:
+            for time in order_of_day:
+                # print(dict_jobs_per_day)
+                # print(dict_jobs_per_day[time])
+                for k in dict_jobs_per_day[time]:
                     # print(k)
                     temp.append(k)
-            # result.append(temp)
-            # # print(i)
-            # # print(temp)
-            for k in temp:
-                self.schedule_per_day[i].append(temp)
+            self.schedule_per_day[day] = temp
+            result.append(temp)
+
+            # # # print(i)
+            # # # print(temp)
+            # for k in temp:
+            #     self.schedule_per_day[day].append(temp)
         return self.schedule_per_day
 
     def create_schedule_matrix(self) -> None:
@@ -89,8 +91,8 @@ class CreateSchedule:
         return self.schedule_per_day
 
 
-cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
-a = CreateSchedule(cells)
-pprint(a.get_schedule_dict_per_day())
+# cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
+# a = CreateSchedule(cells)
+# pprint(a.get_schedule_dict_per_day())
 # for i in a.get_schedule_matrix():
 #     print(i)
