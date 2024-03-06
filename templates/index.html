@@ -219,10 +219,12 @@
                 var html = "";
                 jobs_day_selected = global_jobs_by_day[day];
                 for (i of jobs_day_selected){
-                    html += "<h3>"+ i[0] +":</h3><br>"
+
+                    var job_name = i[0] == "Am dishes"?"Morning dishes":i[0];
+                    html += "<h3>"+ job_name +":</h3><br>"
+
                     var points = i[1];
                     var plural = points > 1 ? "Points":"Point";
-                    var day_dishes = i[0] == "Am dishes"?"Morning dishes":i[0];
                     html += "<li>" + i[1] +" <b>" + plural + "</b></li><br>"
                 }
                 $("#response").html(html);

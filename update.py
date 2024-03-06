@@ -31,8 +31,6 @@ class ConnectMongoDB:
             "members_job": members_job_dictionary,
             "schedule_matrix": schedule_matrix,
             "schedule_per_day":schedule_per_day
-
-
         }
         print(schedule_per_day)
         self.collection.insert_one(product)
