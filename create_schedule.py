@@ -55,8 +55,8 @@ class CreateSchedule:
                 # print(dict_jobs_per_day)
                 # print(dict_jobs_per_day[time])
                 for k in dict_jobs_per_day[time]:
-                    # print(k)
-                    temp.append(k)
+                    if k[0]:
+                        temp.append(k)
             self.schedule_per_day[day] = temp
             result.append(temp)
 
@@ -70,11 +70,9 @@ class CreateSchedule:
         days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         hours = ["Time", "Morning", "Day", "Night", "Night"]
         self.matrix.append(hours)
-        # print(self.get_schedule_dict())
         for i in days:
             temp = [i]
             current = self.get_schedule_dict()[i]
-            # print(current)
             for index, val in current.items():
                 temp += val
             self.matrix.append(temp)
@@ -91,8 +89,8 @@ class CreateSchedule:
         return self.schedule_per_day
 
 
-# cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
-# a = CreateSchedule(cells)
-# pprint(a.get_schedule_dict_per_day())
+cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
+a = CreateSchedule(cells)
+pprint(a.get_schedule_dict_per_day())
 # for i in a.get_schedule_matrix():
 #     print(i)
