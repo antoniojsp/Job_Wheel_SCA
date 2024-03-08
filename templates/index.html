@@ -11,7 +11,6 @@
 
 
     <style>
-
         table, th, td {
           border: 1px solid white;
           border-collapse: collapse;
@@ -220,7 +219,7 @@
                 jobs_day_selected = global_jobs_by_day[day];
                 for (i of jobs_day_selected){
                     var member = i[0];
-                    html += "<h3>"+ member +":</h3><br>"
+                    html += "<h3>"+ member +":</h3>"
                     var job_name = i[1] == "Am dishes"?"Morning dishes":i[1];
                     html += "<li>" + job_name  +"</li><br>"
                 }
@@ -254,7 +253,7 @@
                     }
 
                     for(i in categories){
-                        html += "<h3>"+ i+":</h3><br>"
+                        html += "<h3>"+ i+":</h3>"
                         for (j in server_response[i]){
                             var points = server_response[i][j][1] > 1 ? "Points":"Point";
                             html += "<li>" + server_response[i][j][0] + ", " + server_response[i][j][1] + " <b>" + points + ".</b> </li><br>";

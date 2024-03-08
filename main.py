@@ -28,7 +28,6 @@ def update():
     conn = ConnectMongoDB()
     conn.update_database()
     current_information_from_mongo = conn.retrieve()
-    # print(current_information_from_mongo)
     return redirect("/")  # return to the index
 
 

@@ -27,6 +27,7 @@ class CreateSchedule:
         # self.create_schedule_matrix()
         self.create_schedule_dict_per_day()
 
+
     def create_schedule_dictionary(self) -> None:
 
         for job, day, points, name in self.data[1:]:  # first line holds the name of the term
@@ -43,27 +44,17 @@ class CreateSchedule:
     def create_schedule_dict_per_day(self):
         week_days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         order_of_day = ["Morning", "Day", "Night"]
-        # print(len(week_days))
         result = []
         for day in week_days:
-            # print(i)
             dict_jobs_per_day = self.week[day]
-            # print(dict_jobs_per_day)
-            # print()
             temp = []
             for time in order_of_day:
-                # print(dict_jobs_per_day)
-                # print(dict_jobs_per_day[time])
+
                 for k in dict_jobs_per_day[time]:
                     if k[0]:
                         temp.append(k)
             self.schedule_per_day[day] = temp
             result.append(temp)
-
-            # # # print(i)
-            # # # print(temp)
-            # for k in temp:
-            #     self.schedule_per_day[day].append(temp)
         return self.schedule_per_day
 
     def create_schedule_matrix(self) -> None:
@@ -89,8 +80,8 @@ class CreateSchedule:
         return self.schedule_per_day
 
 
-cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
-a = CreateSchedule(cells)
-pprint(a.get_schedule_dict_per_day())
+# cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
+# a = CreateSchedule(cells)
+# pprint(a.get_schedule_dict_per_day())
 # for i in a.get_schedule_matrix():
 #     print(i)
