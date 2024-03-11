@@ -4,16 +4,16 @@ from gather_cells import GatherCellsFromGoogle
 
 class MemberJobs:
     def __init__(self, data: list):
-        self.data = data
-        self.assigned_jobs = {"Total points": 0}  # hold the info from each member and their jobs
+        self.data: list[str] = data
+        self.assigned_jobs: dict = {"Total points": 0}  # hold the info from each member and their jobs
         #  different storage for no assigned jobs
-        self.no_assigned_jobs = {"Jobs": [], "Total points": 0}
+        self.no_assigned_jobs: dict = {"Jobs": [], "Total points": 0}
         #  current term's sheet name
-        self.current_sheet_name = data[0]
+        self.current_sheet_name: str = data[0]
         #  keep track of the total points of all the jobs (assigned and no assigned)
-        self.points = 0
+        self.points: float = 0
         #  list of members (names need to be unique)
-        self.names = set()
+        self.names: set[str] = set()
         #  pull information from Google Sheets and creates the dict to be used by mongodb
         self.fill_up_from_sheet()
 
@@ -31,9 +31,9 @@ class MemberJobs:
             If points are not presented, it catch the error and set it to zero,
             '''
             try:
-                points = float(points)
+                points: float = float(points)
             except ValueError:
-                points = 0
+                points: float = 0
 
             if not name or name == "NA":
                 name = "No assigned jobs"
@@ -86,14 +86,15 @@ class MemberJobs:
         return self.current_sheet_name
 
     def get_full_dict(self):
-        data_term = {"Current term name": self.current_sheet_name,
-                     "No assigned jobs": self.no_assigned_jobs,
-                     "Assigned jobs": self.assigned_jobs,
-                     "General points": self.points,
-                     "Members names": list(self.names)}
+        data_term: dict[str:list] = {"Current term name": self.current_sheet_name,
+                                     "No assigned jobs": self.no_assigned_jobs,
+                                     "Assigned jobs": self.assigned_jobs,
+                                     "General points": self.points,
+                                     "Members names": list(self.names)}
         return data_term
 
 
-# cells = GatherCells(title="JS Job Wheel").get_cells_data()
-# a = MemberJobs(cells).get_full_dict()
-# pprint(a)
+if __name__ == "__main__":
+    cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
+    a = MemberJobs(cells).get_full_dict()
+    pprint(a)

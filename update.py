@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import os
@@ -10,8 +12,8 @@ from member_jobs import MemberJobs
 class ConnectMongoDB:
     def __init__(self):
         uri = os.environ['uri']
-        self.client = MongoClient(uri, server_api=ServerApi('1'))  # atlas
-        # self.client = MongoClient()  # local, just for testing
+        # self.client = MongoClient(uri, server_api=ServerApi('1'))  # atlas
+        self.client = MongoClient()  # local, just for testing
         self.db = self.client["SCA_Job_Wheel"]
         self.collection = self.db["Jobs_points"]
 
@@ -20,19 +22,18 @@ class ConnectMongoDB:
         Gather information from google sheets, form a dictionary and send it to mongodb
         :return:
         '''
-        cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()  # raw data
+        cells: list[list[str]] = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()  # raw data
         schedule = CreateSchedule(cells)
         # forming dictionary
-        members_job_dictionary = MemberJobs(
-            cells).get_full_dict()  # convert the cells in a dictionary with all the information
+        members_job_dictionary = MemberJobs(cells).get_full_dict()  # format cell info into a dictionary
         schedule_matrix = schedule.get_schedule_matrix()
         schedule_per_day = schedule.get_schedule_dict_per_day()
+
         product = {
             "members_job": members_job_dictionary,
             "schedule_matrix": schedule_matrix,
-            "schedule_per_day":schedule_per_day
+            "schedule_per_day": schedule_per_day
         }
-        print(schedule_per_day)
         self.collection.insert_one(product)
 
     def retrieve(self):
@@ -49,14 +50,8 @@ class ConnectMongoDB:
         del last_document['_id']  # delete "_id" since 'Object of type ObjectId is not JSON serializable'
         return last_document
 
-# cells = GatherCellsFromGoogle("JS Job Wheel").get_cells_data()
-# members_job_dictionary = MemberJobs(cells).get_full_dict()  # convert the cells in a dictionary with all the information
-# schedule_dictionary = CreateSchedule(cells).get_schedule()
-# product = {
-#     "members_job": members_job_dictionary,
-#     "schedule": schedule_dictionary
-# }
-#
-# mongo_conn = ConnectMongoDB()
-# mongo_conn.insert(product)
-# print(mongo_conn.retrieve())
+
+if __name__ == "__main__":
+    mongo_conn = ConnectMongoDB()
+    mongo_conn.update_database()
+    pprint(mongo_conn.retrieve())
