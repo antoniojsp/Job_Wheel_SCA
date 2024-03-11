@@ -70,13 +70,17 @@ class CreateSchedule:
             for time in order_of_day:
                 for name, job in dict_jobs_per_day[time]:
                     if name == "":
-                        names_temp.append("No assigned")
+                        names_temp.append(("No assigned",time))
                     else:
-                        names_temp.append(name)
+                        names_temp.append((name, time))
 
             self.schedule_per_day[day] = names_temp
 
     def create_schedule_matrix(self) -> None:
+        '''
+        gather information from self.get_daily_turns and it in a 2d list or matrix to represent a calendar
+        :return: None
+        '''
         days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         for i in days:
             temp = [i]
@@ -85,18 +89,12 @@ class CreateSchedule:
                 temp += val
             self.calendar_matrix.append(temp)
 
-        # for i in self.calendar_matrix:
-        #     print(i)
-
-        turns = ["Time"]  #  first colum,
+        # creating the first column
+        time_of_the_day: list[str] = ["Time"]
         for i in range(1, len(self.calendar_matrix[0])):
-            turns.append(self.calendar_matrix[0][i][1])
-            # print(self.calendar_matrix[0][i][1])
+            time_of_the_day.append(self.calendar_matrix[0][i][1])
 
-        self.calendar_matrix = [turns] + self.calendar_matrix
-        print()
-        # for i in self.calendar_matrix:
-        #     print(i)
+        self.calendar_matrix = [time_of_the_day] + self.calendar_matrix
         self.calendar_matrix = list(zip(*self.calendar_matrix))  # transpose matrix
 
     def get_daily_turns(self):
@@ -113,6 +111,6 @@ if __name__ == "__main__":
     cells = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()
     a = CreateSchedule(cells)
     # pprint(a.get_daily_turns())
-    # pprint(a.get_schedule_dict_per_day())
-    for i in a.get_schedule_matrix():
-        print(i)
+    pprint(a.get_schedule_dict_per_day())
+    # for i in a.get_schedule_matrix():
+    #     print(i)

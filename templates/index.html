@@ -166,7 +166,7 @@
             for (i of data.slice(1)){
                 schedule_html += `<tr>`
                 for (j of i){
-                    console.log(j)
+//                     console.log(j)
                     if (excluded.includes(j)){
                         schedule_html += `<td>${j}</td>\n`;
                     }else{
@@ -177,17 +177,27 @@
                 schedule_html += `</tr>`
             };
             return schedule_html;
+        };
 
-        }
 
         function populate(selector, string) {
           $(selector).append(string);
-        }
+        };
+
+        function generate_dropmenu(days_week, selector){
+            var html = "";
+            for (i of days_week){
+                html += '<option value="' + i + '">' + i + '</option>';
+            };
+            populate(selector, html);
+        };
 
         var global_members;
         var global_schedule_matrix;
         var global_jobs_by_day;
 
+
+        // Initial set up
         (function lista(){
             $.getJSON("/_get_dictionary",
               {},
@@ -211,13 +221,7 @@
               });
         })();
 
-        function generate_dropmenu(days_week, selector){
-            var html = "";
-            for (i of days_week){
-                html += '<option value="' + i + '">' + i + '</option>';
-            };
-            populate(selector, html);
-        }
+
 
 
         $(document).ready(function(){
@@ -226,6 +230,7 @@
                 var html = "";
                 jobs_day_selected = global_jobs_by_day[day];
                 for (i of jobs_day_selected){
+                    console.log(i)
                     var member = i[0];
                     html += "<h3>"+ member +":</h3>"
                     var job_name = i[1] == "Am dishes"?"Morning dishes":i[1];
@@ -235,46 +240,46 @@
             });
 
 
-        $('#names').on( "change", function(){
-            var member = $('#names').val();
-            var html = "";
-            if (member == "No assigned jobs"){
-                server_response = global_members["No assigned jobs"];
-                for (job of server_response["Jobs"]){
-                    var day = job[0];
-                    var job_name = job[1];
-                    var points = job[2]
-                    var plural = points > 1 ? "Points":"Point";
-                    html += "<li>" + day + ", " + job_name + ", <b>" +  points + " " + plural + ".</b> </li><br>";
-                };
-            html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
-
-            }else{
-                server_response = global_members["Assigned jobs"][member];
-                var list_times = ["Coord", "Weekly", "Biweekly", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
-                var categories = {}
-                for (i of list_times){
-                    if(server_response[i]){
-                        categories[i] = server_response[i]
-                    }
-                }
-
-                for(i in categories){
-                    html += "<h3>"+ i+":</h3>"
-                    for (j in server_response[i]){
-                        var points = server_response[i][j][1] > 1 ? "Points":"Point";
-                        html += "<li>" + server_response[i][j][0] + ", " + server_response[i][j][1] + " <b>" + points + ".</b> </li><br>";
+            $('#names').on( "change", function(){
+                var member = $('#names').val();
+                var html = "";
+                if (member == "No assigned jobs"){
+                    server_response = global_members["No assigned jobs"];
+                    for (job of server_response["Jobs"]){
+                        var day = job[0];
+                        var job_name = job[1];
+                        var points = job[2]
+                        var plural = points > 1 ? "Points":"Point";
+                        html += "<li>" + day + ", " + job_name + ", <b>" +  points + " " + plural + ".</b> </li><br>";
                     };
-                };
-
                 html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
-             }
 
-            $("#response").html(html);
+                }else{
+                    server_response = global_members["Assigned jobs"][member];
+                    var list_times = ["Coord", "Weekly", "Biweekly", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+                    var categories = {}
+                    for (i of list_times){
+                        if(server_response[i]){
+                            categories[i] = server_response[i]
+                        }
+                    }
+
+                    for(i in categories){
+                        html += "<h3>"+ i+":</h3>"
+                        for (j in server_response[i]){
+                            var points = server_response[i][j][1] > 1 ? "Points":"Point";
+                            html += "<li>" + server_response[i][j][0] + ", " + server_response[i][j][1] + " <b>" + points + ".</b> </li><br>";
+                        };
+                    };
+
+                    html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
+                 }
+
+                $("#response").html(html);
 
 
-        });
+            });
 
     });
 
