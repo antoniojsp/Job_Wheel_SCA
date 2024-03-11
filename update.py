@@ -20,29 +20,30 @@ class ConnectMongoDB:
     def update_database(self):
         '''
         Gather information from google sheets, form a dictionary and send it to mongodb
+        It can restore the database back in a working state
         :return:
         '''
         cells: list[list[str]] = GatherCellsFromGoogle(title="JS Job Wheel").get_cells_data()  # raw data
         schedule = CreateSchedule(cells)
         # forming dictionary
-        members_job_dictionary = MemberJobs(cells).get_full_dict()  # format cell info into a dictionary
-        schedule_matrix = schedule.get_schedule_matrix()
-        schedule_per_day = schedule.get_schedule_dict_per_day()
+        members_job_dictionary: dict = MemberJobs(cells).get_full_dict()  # format cell info into a dictionary
+        schedule_matrix: list[tuple] = schedule.get_schedule_matrix()
+        schedule_per_day:dict = schedule.get_schedule_dict_per_day()
 
-        product = {
+        product: dict = {
             "members_job": members_job_dictionary,
             "schedule_matrix": schedule_matrix,
             "schedule_per_day": schedule_per_day
         }
         self.collection.insert_one(product)
 
-    def retrieve(self):
+    def retrieve(self) -> dict:
         """
         Pull the last record in mongodb to be use by the client js to display all the information
         :return:
         """
-        last_entry = self.collection.find().limit(1).sort([('$natural', -1)])
-        result = [i for i in last_entry]
+        list_last_entry: list = self.collection.find().limit(1).sort([('$natural', -1)])
+        result: list[dict] = [i for i in list_last_entry]
         number_documents = len(result)
         if number_documents == 0:  # if 0, database has no records and needs to be restored.
             raise ValueError("The database is empty and needs to be restored.")

@@ -15,7 +15,7 @@ class GatherCellsFromGoogle:
 
     def get_cells_data(self):
         entire_sheet = self.sheet.worksheet(self.current_term_sheet_name)  # extract the most recent google sheet
-        result = [self.current_term_sheet_name]  # first index will store the name of the current term to be used
+        result: list[str] = [[self.current_term_sheet_name]]  # first index will store the name of the current term to be used
         # for the other methods. after the first index, all the regular information is included
         for row in entire_sheet.get()[1:]:
             if row[0] == "":  # if cell has no job name, then is ignored

@@ -112,5 +112,5 @@ if __name__ == "__main__":
     a = CreateSchedule(cells)
     # pprint(a.get_daily_turns())
     pprint(a.get_schedule_dict_per_day())
-    # for i in a.get_schedule_matrix():
-    #     print(i)
+    for i in a.get_schedule_matrix():
+        print()
