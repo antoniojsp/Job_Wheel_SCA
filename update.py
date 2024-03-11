@@ -12,8 +12,8 @@ from member_jobs import MemberJobs
 class ConnectMongoDB:
     def __init__(self):
         uri = os.environ['uri']
-        # self.client = MongoClient(uri, server_api=ServerApi('1'))  # atlas
-        self.client = MongoClient()  # local, just for testing
+        self.client = MongoClient(uri, server_api=ServerApi('1'))  # atlas
+        # self.client = MongoClient()  # local, just for testing
         self.db = self.client["SCA_Job_Wheel"]
         self.collection = self.db["Jobs_points"]
 
