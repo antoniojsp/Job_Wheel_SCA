@@ -15,7 +15,7 @@ except ValueError as err:
 @app.route("/")
 def index():
     return render_template('index.html',
-                           title=current_information_from_mongo["members_job"]['Current term name'])
+                           title=current_information_from_mongo["members_job"]['Current term name'][0])
 
 
 @app.route("/update")
