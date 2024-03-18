@@ -237,7 +237,7 @@
 
                     var nombres = global_members["Members names"].sort();
                     var names_drop_menu = generate_drop_menu(nombres, "#names");
-                    populate('#names', names_drop_menu)
+                    populate('#names_list', names_drop_menu)
 
 
                     var days_week = ["Monday", "Tuesday","Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -332,10 +332,11 @@
         <div id="content-wrap">
             <div id="page-container">
                 <label for='names'>Name: </label>
-                <select id='names'>
+                <input list="names_list" id="names"/>
+                <datalist id='names_list'>
                     <option selected="true" disabled="disabled">Select name</option>
 <!--                     geenerated by js -->
-                </select>
+                </datalist>
 
                <label for='day_of_week'>Day: </label>
                 <select id='day_of_week'>
@@ -346,6 +347,8 @@
                 <div id="list_schedule">
                     <div id="response"></div>
                     <table id="schedule">
+
+
 
 <!--                    js creates schedule-->
                     </table>
