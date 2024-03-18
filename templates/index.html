@@ -152,29 +152,31 @@
           window.scrollTo(0, 0);
         }
 
-        function create_schedule(data){
-
+        function create_schedule(data, member=null){
             var days_week = ['Time', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-
             schedule_html = "<tr>"
-            for(i of days_week){
-                schedule_html += `<th>${i}</th>\n`
+            // add header
+            for(day_name of days_week){
+                schedule_html += `<th>${day_name}</th>\n`
             }
             schedule_html += "</tr>\n"
-
+            // row by row, write the html code with the names and turns per day.
             var excluded = ["Am dishes", "Day dishes", "Night dishes"];
-            for (i of data.slice(1)){
+            for (array_name_turn of data.slice(1)){
                 schedule_html += `<tr>`
-                for (j of i){
-//                     console.log(j)
-                    if (excluded.includes(j)){
-                        schedule_html += `<td>${j}</td>\n`;
-                    }else{
-                    var name = j[0] == ""? "No assigned": j[0];
-                    schedule_html += `<td>${name}</td>\n`;
+                for (name_member of array_name_turn){
+                    if (excluded.includes(name_member)){ //  first column indicate the turn of the day, we want to treat it differently
+                        schedule_html += `<td>${name_member}</td>\n`;
+                    }else{  // if not in excluded list, then it must be a name. if Name not null, then it need to be highlighted.
+                    var name = name_member[0] == ""? "No assigned": name_member[0];
+                        if (name == member){
+                            schedule_html += `<td style="background-color: coral;">${name}</td>\n`;
+                        }else{
+                            schedule_html += `<td>${name}</td>\n`;
+                        };
                     }
                 }
-                schedule_html += `</tr>`
+                schedule_html += `</tr>`;
             };
             return schedule_html;
         };
@@ -184,62 +186,53 @@
           $(selector).append(string);
         };
 
-        function generate_dropmenu(days_week, selector){
+        function generate_drop_menu(options, selector){
             var html = "";
-            for (i of days_week){
-                html += '<option value="' + i + '">' + i + '</option>';
+            for (option of options){
+                html += '<option value="' + option + '">' + option + '</option>';
             };
-            populate(selector, html);
+            return html
         };
 
         var global_members;
         var global_schedule_matrix;
         var global_jobs_by_day;
-
-
-        // Initial set up
+        var global_schedule;
+        // Initial set up (drop menus and visual calendar)
         (function lista(){
             $.getJSON("/_get_dictionary",
               {},
               function(data) {
                     json_package = data.result;
-                    members_data = json_package["members_job"];
-                    schedule_data = json_package["schedule_matrix"];
+                    global_members = json_package["members_job"];
+                    global_schedule = json_package["schedule_matrix"];
                     global_jobs_by_day = json_package["schedule_per_day"];
 
-                    global_members =  members_data
-
-                    schedule_html = create_schedule(schedule_data);
+                    schedule_html = create_schedule(global_schedule);
                     populate('#schedule', schedule_html);
 
-                    var days_week = ["Monday", "Tuesday","Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-                    generate_dropmenu(days_week, '#day_of_week');
+                    var nombres = global_members["Members names"].sort();
+                    var names_drop_menu = generate_drop_menu(nombres, "#names");
+                    populate('#names', names_drop_menu)
 
-                    nombres = members_data["Members names"].sort();
-                    generate_dropmenu(nombres, "#names");
+
+                    var days_week = ["Monday", "Tuesday","Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+                    var days_week_drop_menu = generate_drop_menu(days_week, '#day_of_week');
+                    populate("#day_of_week", days_week_drop_menu);
 
               });
         })();
 
 
         $(document).ready(function(){
-            $('#day_of_week').on( "change", function(){
-                var day = $('#day_of_week').val();
-                var html = "";
-                jobs_day_selected = global_jobs_by_day[day];
-                for (i of jobs_day_selected){
-                    console.log(i)
-                    var member = i[0];
-                    html += "<h3>"+ member +":</h3>"
-                    var job_name = i[1] == "Am dishes"?"Morning dishes":i[1];
-                    html += "<li>" + job_name  +"</li><br>"
-                }
-                $("#response").html(html);
-            });
-
 
             $('#names').on( "change", function(){
                 var member = $('#names').val();
+
+                var schedule_html = create_schedule(global_schedule, member)
+                $('#schedule').empty()
+                populate('#schedule', schedule_html);
+
                 var html = "";
                 if (member == "No assigned jobs"){
                     server_response = global_members["No assigned jobs"];
@@ -260,9 +253,8 @@
                     for (i of list_times){
                         if(server_response[i]){
                             categories[i] = server_response[i]
-                        }
-                    }
-
+                        };
+                    };
                     for(i in categories){
                         html += "<h3>"+ i+":</h3>"
                         for (j in server_response[i]){
@@ -273,11 +265,30 @@
 
                     html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
                  }
-
                 $("#response").html(html);
-
-
             });
+
+
+
+            $('#day_of_week').on( "change", function(){
+
+                var schedule_html = create_schedule(global_schedule)
+                $('#schedule').empty()
+                populate('#schedule', schedule_html);
+
+                var day = $('#day_of_week').val();
+                var html = "";
+                jobs_day_selected = global_jobs_by_day[day];
+                for (i of jobs_day_selected){
+                    var member = i[0];
+                    html += "<h3>"+ member +":</h3>"
+                    var job_name = i[1] == "Am dishes"?"Morning dishes":i[1];
+                    html += "<li>" + job_name  +"</li><br>"
+                }
+                $("#response").html(html);
+            });
+
+
 
     });
 
@@ -299,16 +310,17 @@
                 <label for='names'>Name: </label>
                 <select id='names'>
                     <option selected="true" disabled="disabled">Select name</option>
+<!--                     geenerated by js -->
                 </select>
 
                <label for='day_of_week'>Day: </label>
                 <select id='day_of_week'>
                     <option selected="true" disabled="disabled">Select day</option>
-<!--                    generated by js-->
+<!--                     geenerated by js -->
                 </select>
+
+
                 <div id="response"></div>
-
-
                 <table id="schedule">
 <!--                    js creates schedule-->
                 </table>
