@@ -14,12 +14,27 @@
         table, th, td {
           border: 1px solid white;
           border-collapse: collapse;
-        }
-        th, td {
-          background-color: #42A5F5;
+          position: relative;
+           background-color: #42A5F5;
+/*            width: 500px; */
+/*            height:50px; */
+           text-align: center;
+           border-collapse: collapse;
         }
 
-        html {margin: 0; padding: 0; scroll-behavior: smooth;}
+      th, td {
+         padding-top: 10px;
+         padding-bottom: 10px;
+         padding-left: 20px;
+         padding-right: 20px;
+      }
+
+/*         th { */
+/*         background-color: white; */
+
+/*         } */
+
+        html {margin: 0; 3adding: 0; scroll-behavior: smooth;}
 
 
         body{
@@ -319,11 +334,13 @@
 <!--                     geenerated by js -->
                 </select>
 
+                <div id="list_schedule">
+                    <div id="response"></div>
+                    <table id="schedule">
 
-                <div id="response"></div>
-                <table id="schedule">
 <!--                    js creates schedule-->
-                </table>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
