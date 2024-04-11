@@ -29,19 +29,13 @@
          padding-right: 20px;
       }
 
-/*         #list_schedule { */
-/*           padding: 2rem 2rem; */
-/*           text-align: center; */
-/*         } */
-/*         #response, #schedule { */
-/*           display: inline-block; */
-/*           padding: 1rem 1rem; */
-/*         } */
+        #list_schedule {
+           display: flex;
+  justify-content: space-between;
+        }
 
-/*         #schedule{ */
-/*               top: -50px; */
 
-/*         } */
+
 
         html {margin: 0; 3adding: 0; scroll-behavior: smooth;}
 
@@ -237,7 +231,7 @@
 
                     var nombres = global_members["Members names"].sort();
                     var names_drop_menu = generate_drop_menu(nombres, "#names");
-                    populate('#names_list', names_drop_menu)
+                    populate('#names', names_drop_menu)
 
 
                     var days_week = ["Monday", "Tuesday","Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -332,11 +326,10 @@
         <div id="content-wrap">
             <div id="page-container">
                 <label for='names'>Name: </label>
-                <input list="names_list" id="names"/>
-                <datalist id='names_list'>
+                <select id='names'>
                     <option selected="true" disabled="disabled">Select name</option>
 <!--                     geenerated by js -->
-                </datalist>
+                </select>
 
                <label for='day_of_week'>Day: </label>
                 <select id='day_of_week'>
@@ -345,14 +338,11 @@
                 </select>
 
                 <div id="list_schedule">
-                    <div id="response"></div>
-                    <table id="schedule">
-
-
-
-<!--                    js creates schedule-->
-                    </table>
-                </div>
+                     <div id="response"></div>
+                     <table id="schedule">
+    <!--                    js creates schedule-->
+                      </table>
+                 </div>
             </div>
         </div>
     </div>
@@ -360,15 +350,15 @@
     <footer id="footer" class="panel text-white">
         <div>
         <p><a class ="update_link" href="{{ url_for('update') }}">Update current Job Wheel List</a></p>
-<!--        <div class="footer_container">-->
-<!--            <small>Clone site written by </small><br>-->
-<!--            <small>-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">-->
-<!--                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>-->
-<!--                </svg> Email contact:<a id="footer_mail" href=""> </a></small><br>-->
-<!--             <small>-->
-<!--              <i class='bi bi-github'> </i><a id="footer_url" href = "" Target="_blank">  Personal Github and repo of this site.</a></small>-->
-<!--        </div>-->
+       <div class="footer_container">-->
+           <small>Clone site written by </small><br>-->
+           <small>-->
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">-->
+               <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>-->
+               </svg> Email contact:<a id="footer_mail" href=""> </a></small><br>-->
+            <small>-->
+             <i class='bi bi-github'> </i><a id="footer_url" href = "" Target="_blank">  Personal Github and repo of this site.</a></small>-->
+       </div>-->
 
 
 

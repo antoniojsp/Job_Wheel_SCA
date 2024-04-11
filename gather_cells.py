@@ -24,7 +24,7 @@ class GatherCellsFromGoogle:
                 row.append("")
             job: str = row[0].capitalize().strip()
             day: str = row[1].capitalize().strip()
-            points: float = float(row[4]) if row[4] != "" else 0
+            points: float = float(row[4]) if row[4].isnumeric() else 0
             name: str = row[5].capitalize().strip()
             result.append([job, day, points, name])
         return result
