@@ -21,10 +21,10 @@
         }
 
           th, td {
-             padding-top: 10px;
-             padding-bottom: 10px;
-             padding-left: 20px;
-             padding-right: 20px;
+             padding-top: 5px;
+             padding-bottom: 5px;
+             padding-left: 10px;
+             padding-right: 10px;
           }
 
         #list_schedule {
@@ -231,6 +231,19 @@
                     var names_drop_menu = generate_drop_menu(nombres, "#names");
                     populate('#names', names_drop_menu)
 
+                    console.log(nombres);
+
+                    var html_nombres_list = `<ul>`
+                    for (var nombre of nombres){
+                        html_nombres_list += `<li> ${ nombre } </li>`;
+                    }
+
+                    $("#name").html(html_nombres_list);
+
+
+
+
+
 
                     var days_week = ["Monday", "Tuesday","Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
                     var days_week_drop_menu = generate_drop_menu(days_week, '#day_of_week');
@@ -322,18 +335,27 @@
 
     <div id="content" >
         <div id="content-wrap">
-            <div id="page-container">
-                <label for='names'>Name: </label>
-                <select id='names'>
-                    <option selected="true" disabled="disabled">Select name</option>
-<!--                     geenerated by js -->
-                </select>
 
-               <label for='day_of_week'>Day: </label>
-                <select id='day_of_week'>
-                    <option selected="true" disabled="disabled">Select day</option>
+            <div id="page-container">
+
+                <div id = "name">
+
+                </div>
+
+
+
+
+<!--                 <label for='names'>Name: </label> -->
+<!--                 <select id='names'> -->
+<!--                     <option selected="true" disabled="disabled">Select name</option> -->
 <!--                     geenerated by js -->
-                </select>
+<!--                 </select> -->
+
+<!--                <label for='day_of_week'>Day: </label> -->
+<!--                 <select id='day_of_week'> -->
+<!--                     <option selected="true" disabled="disabled">Select day</option> -->
+<!--                     geenerated by js -->
+<!--                 </select> -->
 
                 <div id="list_schedule">
                      <div id="response"></div>
@@ -349,6 +371,8 @@
     <footer id="footer" class="panel text-white">
         <div>
         <p><a class ="update_link" href="{{ url_for('update') }}">Update current Job Wheel List</a></p>
+
+
        <div class="footer_container">-->
            <small>Clone site written by </small><br>-->
            <small>-->
