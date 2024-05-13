@@ -1,7 +1,5 @@
-from pprint import pprint
-
 from flask import Flask, render_template, redirect, jsonify
-from update import ConnectMongoDB
+from packages.update import ConnectMongoDB
 
 app = Flask(__name__)
 

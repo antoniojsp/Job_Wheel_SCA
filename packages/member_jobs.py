@@ -1,5 +1,5 @@
 from pprint import pprint
-from gather_cells import GatherCellsFromGoogle
+from packages.gather_cells import GatherCellsFromGoogle
 
 
 class MemberJobs:

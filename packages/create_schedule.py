@@ -1,5 +1,5 @@
 from pprint import pprint
-from gather_cells import GatherCellsFromGoogle
+from .gather_cells import GatherCellsFromGoogle
 
 
 class CreateSchedule:

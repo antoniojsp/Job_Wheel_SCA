@@ -1,10 +1,10 @@
 import gspread
-import credentials
+from packages.credentials import credentials
 
 
 class GatherCellsFromGoogle:
     def __init__(self, title):
-        self.gc = gspread.service_account_from_dict(credentials.credentials)
+        self.gc = gspread.service_account_from_dict(credentials)
         self.sheet: str = self.gc.open(title)  # title: title of the spreadsheet to use
         #  get all the sheet names but we use the first one that it's the current term.
         self.current_term_sheet_name: str = self.get_sheet_names()[0]
@@ -24,7 +24,11 @@ class GatherCellsFromGoogle:
                 row.append("")
             job: str = row[0].capitalize().strip()
             day: str = row[1].capitalize().strip()
-            points: float = float(row[4]) if row[4].isnumeric() else 0
+            try:
+                points: float = float(row[4])
+            except ValueError:
+                points: float = 0
+            # points: float = float(row[4]) if row[4].isnumeric() else 0
             name: str = row[5].capitalize().strip()
             result.append([job, day, points, name])
         return result

@@ -1,6 +1,5 @@
-import credentials
+from packages import credentials
 import gspread
-from pprint import pprint
 
 '''
 Eventually, I will need to make a proper database (mongodb or sql) to storage

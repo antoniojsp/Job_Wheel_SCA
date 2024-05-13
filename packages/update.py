@@ -4,9 +4,9 @@ from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import os
 
-from create_schedule import CreateSchedule
-from gather_cells import GatherCellsFromGoogle
-from member_jobs import MemberJobs
+from packages.create_schedule import CreateSchedule
+from packages.gather_cells import GatherCellsFromGoogle
+from packages.member_jobs import MemberJobs
 
 
 class ConnectMongoDB:
