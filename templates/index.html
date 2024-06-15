@@ -3,174 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>SCA Job Wheel {{ title }} </title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-
     <style>
-        table, th, td {
-            border: 1px solid white;
-            border-collapse: collapse;
-            position: relative;
-            background-color: #42A5F5;
-            text-align: center;
-            border-collapse: collapse;
-        }
-
-          th, td {
-             padding-top: 5px;
-             padding-bottom: 5px;
-             padding-left: 10px;
-             padding-right: 10px;
-          }
-
-        #list_schedule {
-            display: flex;
-            justify-content: space-between;
-        }
-
-
-
-
-        html {margin: 0; 3adding: 0; scroll-behavior: smooth;}
-
-
-        body{
-            min-height: 400px;
-            margin-bottom: 200px;
+        body {
             font-family: Arial, Helvetica, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
         }
 
-        h3{
-          font-size: 20px;
-        }
-
-        #page-container {
-           min-height: 100vh;
-           position: relative;
-        }
-
-        #content-wrap {
-          padding-bottom: 3.7 rem;    /* Footer height */
-          padding-left: 80px;
-        }
-
-
-        footer {
-            background: #42A5F5;
-            position: fixed;
-            padding: 10px 10px 0px 10px;
-            bottom: 0;
-            width: 100%;
-            height: 50px;
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: #007bff;
             color: white;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header .header-right {
+            float: right;
+        }
+
+        .header .header-right a {
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .header .header-right a:hover {
+            background-color: #0056b3;
         }
 
         .content {
-          padding: 20px;
-          min-height: 120%;
-          margin: 0 auto -50px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 20px;
         }
 
-        select{
-            margin-bottom:20px;
-            margin-top:20px;
+        select {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 300px;
         }
 
-
-        a {
-              color: white;
+        #list_schedule {
+            display: flex;
+            width: 100%;
+            gap: 20px;
+            margin-top: 20px;
         }
 
+        #response, #schedule {
+            flex: 1;
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
 
-        * {box-sizing: border-box;}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            background-color: white;
+        }
 
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      overflow: hidden;
-      background-color: #42A5F5;
-      padding: 20px 40px;
-      margin:0px;
-    }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
 
-    .header h2 {
-      float: left;
-      color: black;
-      text-align: center;
-      padding: 15px;
-      text-decoration: none;
-      font-size: 25px;
-      line-height: 25px;
-      border-radius: 4px;
-    }
+        footer {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
 
-    .header a.logo {
-      font-size: 100px;
-      font-weight: bold;
-    }
+        @media screen and (max-width: 768px) {
+            .header, .content, footer {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
 
-    .header a:hover {
-      background-color: #ddd;
-      color: black;
-    }
+            .header .header-right {
+                float: none;
+                text-align: center;
+            }
 
-    .header a.active {
-      background-color: white;
-      color: black;
-    }
+            .header .header-right a {
+                display: block;
+                margin-bottom: 5px;
+            }
 
-    .header-right {
-      float: right;
-    }
-
-    .header-right a{
-          float: left;
-          color: black;
-          text-align: center;
-          padding: 12px;
-          text-decoration: none;
-          font-size: 18px;
-          line-height: 25px;
-          border-radius: 4px;
-    }
-
-    @media screen and (max-width: 500px) {
-      .header a {
-        float: none;
-        display: block;
-        text-align: left;
-      }
-
-      .header-right {
-        float: none;
-      }
-    }
-
-    .update_link,
-    .footer_container {
-      float: left;
-      width: 50%;
-    }
+            #list_schedule {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6cHty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4xF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script>
         window.onbeforeunload = function () {
-          window.scrollTo(0, 0);
+            window.scrollTo(0, 0);
         }
 
         function create_schedule(data, member=null){
             var days_week = ['Time', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-            schedule_html = "<tr>"
+            var schedule_html = "<tr>"
             // add header
             for(day_name of days_week){
                 schedule_html += `<th>${day_name}</th>\n`
@@ -183,79 +153,62 @@
                 for (name_member of array_name_turn){
                     if (excluded.includes(name_member)){ //  first column indicate the turn of the day, we want to treat it differently
                         schedule_html += `<td>${name_member}</td>\n`;
-                    }else{  // if not in excluded list, then it must be a name. if Name not null, then it need to be highlighted.
-                    var name = name_member[0] == ""? "No assigned": name_member[0];
+                    } else {  // if not in excluded list, then it must be a name. if Name not null, then it need to be highlighted.
+                        var name = name_member[0] == ""? "No assigned": name_member[0];
                         if (name == member){
                             schedule_html += `<td style="background-color: coral;">${name}</td>\n`;
-                        }else{
+                        } else {
                             schedule_html += `<td>${name}</td>\n`;
-                        };
+                        }
                     }
                 }
                 schedule_html += `</tr>`;
-            };
+            }
             return schedule_html;
-        };
-
+        }
 
         function populate(selector, string) {
-          $(selector).append(string);
-        };
+            $(selector).append(string);
+        }
 
         function generate_drop_menu(options, selector){
             var html = "";
             for (option of options){
                 html += '<option value="' + option + '">' + option + '</option>';
-            };
+            }
             return html
-        };
+        }
 
         var global_members;
         var global_schedule_matrix;
         var global_jobs_by_day;
         var global_schedule;
+
         // Initial set up (drop menus and visual calendar)
         (function lista(){
             $.getJSON("/_get_dictionary",
               {},
               function(data) {
-                    json_package = data.result;
-                    global_members = json_package["members_job"];
-                    global_schedule = json_package["schedule_matrix"];
-                    global_jobs_by_day = json_package["schedule_per_day"];
+                json_package = data.result;
+                global_members = json_package["members_job"];
+                global_schedule = json_package["schedule_matrix"];
+                global_jobs_by_day = json_package["schedule_per_day"];
 
-                    schedule_html = create_schedule(global_schedule);
-                    populate('#schedule', schedule_html);
+                schedule_html = create_schedule(global_schedule);
+                populate('#schedule', schedule_html);
 
-                    var nombres = global_members["Members names"].sort();
-                    var names_drop_menu = generate_drop_menu(nombres, "#names");
-                    populate('#names', names_drop_menu)
+                var nombres = global_members["Members names"].sort();
+                var names_drop_menu = generate_drop_menu(nombres, "#names");
+                populate('#names', names_drop_menu);
 
-                    console.log(nombres);
-
-                    var html_nombres_list = `<ul>`
-                    for (var nombre of nombres){
-                        html_nombres_list += `<li> ${ nombre } </li>`;
-                    }
-
-                    $("#name").html(html_nombres_list);
-
-
-
-
-
-
-                    var days_week = ["Monday", "Tuesday","Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-                    var days_week_drop_menu = generate_drop_menu(days_week, '#day_of_week');
-                    populate("#day_of_week", days_week_drop_menu);
-
+                var days_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                var days_week_drop_menu = generate_drop_menu(days_week, '#day_of_week');
+                populate("#day_of_week", days_week_drop_menu);
               });
         })();
 
-
         $(document).ready(function(){
-
-            $('#names').on( "change", function(){
+            $('#names').on("change", function(){
                 var member = $('#names').val();
 
                 var schedule_html = create_schedule(global_schedule, member)
@@ -268,13 +221,12 @@
                     for (job of server_response["Jobs"]){
                         var day = job[0];
                         var job_name = job[1];
-                        var points = job[2]
+                        var points = job[2];
                         var plural = points > 1 ? "Points":"Point";
                         html += "<li>" + day + ", " + job_name + ", <b>" +  points + " " + plural + ".</b> </li><br>";
-                    };
-                html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
-
-                }else{
+                    }
+                    html += "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
+                } else {
                     server_response = global_members["Assigned jobs"][member];
                     var list_times = ["Coord", "Weekly", "Biweekly", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -282,112 +234,67 @@
                     for (i of list_times){
                         if(server_response[i]){
                             categories[i] = server_response[i]
-                        };
-                    };
+                        }
+                    }
                     for(i in categories){
                         html += "<h3>"+ i+":</h3>"
                         for (j in server_response[i]){
                             var points = server_response[i][j][1] > 1 ? "Points":"Point";
-                            html += "<li>" + server_response[i][j][0] + ", " + server_response[i][j][1] + " <b>" + points + ".</b> </li><br>";
-                        };
-                    };
-
-                    html+= "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
-                 }
-                $("#response").html(html);
-            });
-
-
-
-            $('#day_of_week').on( "change", function(){
-
-                var schedule_html = create_schedule(global_schedule)
-                $('#schedule').empty()
-                populate('#schedule', schedule_html);
-
-                var day = $('#day_of_week').val();
-                var html = "";
-                jobs_day_selected = global_jobs_by_day[day];
-                for (i of jobs_day_selected){
-                    var member = i[0];
-                    html += "<h3>"+ member +":</h3>"
-                    var job_name = i[1] == "Am dishes"?"Morning dishes":i[1];
-                    html += "<li>" + job_name  +"</li><br>"
+                            html += "<li>"+ server_response[i][j][0]+ ", " + "<b>"+ server_response[i][j][1]+ " "+points+ ".</b> </li><br>";
+                        }
+                    }
+                    html += "<h3>Total points</h3> <br><li>" + server_response["Total points"] + " points.</li>";
                 }
-                $("#response").html(html);
+                $('#response').empty()
+                populate('#response', html);
             });
 
-
-
-    });
+            $('#day_of_week').on("change", function(){
+                var day = $('#day_of_week').val();
+                html = "";
+                var server_response = global_jobs_by_day[day];
+                for (job in server_response){
+                    name = server_response[job][0];
+                    if (name == ""){
+                        name = "No assigned"
+                    }
+                    job_name = server_response[job][1];
+                    points = server_response[job][2];
+                    html += "<li>"+ name + ", " + job_name + ", " + points+ " points. </li><br>"
+                }
+                $('#response').empty()
+                populate('#response', html)
+            });
+        });
 
     </script>
 
-
-    <div class="header">
-        <h2>Janet Smith's <b>"{{ title }}"</b> Job Wheel</h2>
-      <div class="header-right">
-        <a class="active" href="#home">Home</a>
-        <a href="https://eugenesca.com/">SCA Website</a>
-        <a href="https://eugenesca.com/js_wiki/">JS Wiki</a>
-      </div>
-    </div>
-
-    <div id="content" >
+    <div id="page-container">
         <div id="content-wrap">
-
-            <div id="page-container">
-
-                <div id = "name">
-
+            <div class="header">
+                <h2>SCA Job Wheel {{ title }} </h2>
+                <div class="header-right">
+                    <a class="active" href="#home">Home</a>
+                    <a href="#contact">Contact</a>
+                    <a href="#about">About</a>
                 </div>
-
-
-
-
-<!--                 <label for='names'>Name: </label> -->
-<!--                 <select id='names'> -->
-<!--                     <option selected="true" disabled="disabled">Select name</option> -->
-<!--                     geenerated by js -->
-<!--                 </select> -->
-
-<!--                <label for='day_of_week'>Day: </label> -->
-<!--                 <select id='day_of_week'> -->
-<!--                     <option selected="true" disabled="disabled">Select day</option> -->
-<!--                     geenerated by js -->
-<!--                 </select> -->
-
+            </div>
+            <div class="content">
+                <select id="names">
+                    <option value="Select name" selected>Select name</option>
+                </select>
+                <select id="day_of_week">
+                    <option value="Select day" selected>Select day</option>
+                </select>
                 <div id="list_schedule">
-                     <div id="response"></div>
-                     <table id="schedule">
-    <!--                    js creates schedule-->
-                     </table>
+                    <div id="response"></div>
+                    <div id="schedule"></div>
                 </div>
-
             </div>
         </div>
     </div>
-
-    <footer id="footer" class="panel text-white">
-        <div>
-        <p><a class ="update_link" href="{{ url_for('update') }}">Update current Job Wheel List</a></p>
-
-
-       <div class="footer_container">-->
-           <small>Clone site written by </small><br>-->
-           <small>-->
-               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">-->
-               <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>-->
-               </svg> Email contact:<a id="footer_mail" href=""> </a></small><br>-->
-            <small>-->
-             <i class='bi bi-github'> </i><a id="footer_url" href = "" Target="_blank">  Personal Github and repo of this site.</a></small>-->
-       </div>-->
-
-
-
-        </div>
+    <footer>
+        &copy; 2024 SCA Job Wheel. All rights reserved.
     </footer>
-
 </body>
-
 </html>
